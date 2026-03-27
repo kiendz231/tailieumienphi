@@ -556,6 +556,15 @@
                         html += '<div class="cat-tag" data-cat="vip" style="color: #ffcc00; border-color: #ffcc00;" onclick="filterDocs(\'vip\', this)">🌟 VIP Hub</div>';
                     }
                 }
+                
+                // Load additional tags from DB
+                snap.forEach(d => {
+                    const tagName = d.data().name;
+                    if (tagName) {
+                        html += `<div class="cat-tag" data-cat="${tagName}" onclick="filterDocs('${tagName}', this)">${tagName}</div>`;
+                    }
+                });
+                
                 catDiv.innerHTML = html;
             } catch (e) { console.error("Cannot fetch tags:", e); }
         }
@@ -570,26 +579,45 @@
             const docGrid = document.getElementById('docGrid');
             let filtered = allDocs;
 
+            // Search Filter Logic
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            if (searchTerm) {
+                filtered = filtered.filter(d => 
+                    (d.title && d.title.toLowerCase().includes(searchTerm)) ||
+                    (d.description && d.description.toLowerCase().includes(searchTerm)) ||
+                    (d.category && d.category.toLowerCase().includes(searchTerm))
+                );
+            }
+
             if (category === 'Tất cả') {
                 // Public docs + VIP docs if user has access
                 const hasVipAccess = ['admin', 'vip', 'contributor'].includes(currentUserRole);
-                filtered = allDocs.filter(d => !d.isVipOnly || hasVipAccess);
+                filtered = filtered.filter(d => !d.isVipOnly || hasVipAccess);
             } else if (category === 'vault') {
-                filtered = allDocs.filter(d => currentUserVault.includes(d.id));
-                if (filtered.length === 0) {
+                filtered = filtered.filter(d => currentUserVault.includes(d.id));
+                if (filtered.length === 0 && !searchTerm) {
                     return docGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--text-secondary);"><p>Thư viện của bạn đang trống.<br>Hãy nhấn nút 📌 trên tài liệu để lưu vào đây!</p></div>`;
                 }
             } else if (category === 'vip') {
-                filtered = allDocs.filter(d => d.isVipOnly);
-                if (filtered.length === 0) {
+                filtered = filtered.filter(d => d.isVipOnly);
+                if (filtered.length === 0 && !searchTerm) {
                     return docGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--text-secondary);"><p>Khu vực VIP Hub đang được cập nhật các tài liệu mới...</p></div>`;
                 }
             } else {
-                filtered = allDocs.filter(d => d.category === category);
+                filtered = filtered.filter(d => d.category === category);
             }
 
-            docGrid.innerHTML = renderDocs(filtered);
+            if (filtered.length === 0) {
+                docGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--text-secondary);"><p>Không tìm thấy tài liệu phù hợp...</p></div>`;
+            } else {
+                docGrid.innerHTML = renderDocs(filtered);
+            }
         }
+
+        // Add search input listener
+        document.getElementById('searchInput').addEventListener('input', () => {
+            renderCurrentGrid();
+        });
 
         // Fetch live data directly
 
