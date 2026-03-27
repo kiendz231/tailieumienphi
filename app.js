@@ -112,7 +112,7 @@ async function fetchUserLevelAvatar(uid) {
         avatarDiv.style.backgroundPosition = 'center';
         avatarDiv.innerHTML = '';
 
-        // Cập nhật lại list card nếu AllDocs đã tải xong
+        // Cập nhật lại list card if AllDocs already loaded
         if (allDocs.length > 0) {
             const activeCat = document.querySelector('#homeCategories .cat-tag.active');
             filterDocs(activeCat ? activeCat.innerText : 'Tất cả');
@@ -165,17 +165,15 @@ window.openModal = async function (docId) {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 
-    // --- Nhúng Video hướng dẫn (nếu có) ---
+    // --- Video Embed Area ---
     const videoArea = document.getElementById('videoEmbedArea');
     const videoFrame = document.getElementById('videoEmbedFrame');
     if (data.videoUrl) {
         let videoEmbedUrl = data.videoUrl;
-        // YouTube: chuyển sang embed
         const ytMatch = data.videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
         if (ytMatch) {
             videoEmbedUrl = `https://www.youtube.com/embed/${ytMatch[1]}?rel=0`;
         } else {
-            // Google Drive video
             const gdvMatch = data.videoUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
             if (gdvMatch) videoEmbedUrl = `https://drive.google.com/file/d/${gdvMatch[1]}/preview`;
         }
@@ -186,11 +184,11 @@ window.openModal = async function (docId) {
         videoArea.style.display = 'none';
     }
 
-    // --- Nhúng xem trước file ---
+    // --- File Preview Area ---
     const iframe = document.getElementById('filePreviewFrame');
     const loading = document.getElementById('previewLoading');
     const previewArea = document.getElementById('filePreviewArea');
-    const allowPreview = data.allowPreview !== false; // mặc định true nếu không có trường
+    const allowPreview = data.allowPreview !== false;
 
     if (!allowPreview) {
         iframe.style.display = 'none';
@@ -271,10 +269,8 @@ window.toggleVault = async function (docId) {
         }
 
         renderCurrentGrid();
-        
-        // Show floating notification
         const msg = isSaved ? 'Đã xóa khỏi Thư viện!' : 'Đã lưu vào Thư viện Cá nhân!';
-        alert(msg); // Simplified for now
+        alert(msg);
     } catch (e) { console.error("Error toggling vault:", e); }
 };
 
@@ -332,7 +328,6 @@ window.openContributeModal = async function () {
     document.getElementById('ctbSubmitBtn').disabled = false;
     document.getElementById('ctbSubmitBtn').innerText = 'Gửi Đóng Góp →';
 
-    // Load tags vào datalist
     const dl = document.getElementById('ctbTagList');
     dl.innerHTML = '';
     try {
@@ -399,7 +394,7 @@ window.submitContribution = async function () {
 
 // UI Variables (Auth Modal)
 const authModal = document.getElementById('authModal');
-window.authMode = 'login'; // 'login' or 'register'
+window.authMode = 'login'; 
 
 window.openAuthModal = function () {
     authModal.classList.add('active');
@@ -444,7 +439,7 @@ window.submitAuth = async function () {
     const errorMsg = document.getElementById('authError');
     const btn = document.getElementById('authSubmitBtn');
 
-    btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="4.93" x2="19.07" y2="7.76"></line></svg> Đang xử lý...';
+    btn.innerHTML = 'Đang xử lý...';
     errorMsg.style.display = 'none';
 
     try {
@@ -456,7 +451,6 @@ window.submitAuth = async function () {
         window.closeAuthModal();
     } catch (error) {
         errorMsg.style.display = 'block';
-        // Lọc lỗi sang tiếng Việt cho thân thiện
         let tiengVietMap = {
             'auth/email-already-in-use': 'Email này đã được sử dụng.',
             'auth/weak-password': 'Mật khẩu quá yếu (tối thiểu 6 ký tự).',
@@ -473,13 +467,11 @@ window.signOutAdmin = async function () {
     await signOut(auth);
 }
 
-// Close modal when clicking outside content
 window.addEventListener('click', (e) => {
     if (e.target === modal) window.closeModal();
     if (e.target === authModal) window.closeAuthModal();
 });
 
-// Escape key to close modal
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         if (modal.classList.contains('active')) window.closeModal();
@@ -487,7 +479,6 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Auth State Listener
 window.defaultAuthorDesc = document.getElementById('authorDesc').innerHTML;
 onAuthStateChanged(auth, (user) => {
     const navBtn = document.getElementById('navAuthBtn');
@@ -496,21 +487,18 @@ onAuthStateChanged(auth, (user) => {
     const authorDesc = document.getElementById('authorDesc');
 
     if (user) {
-        // Logged in
         currentUserUid = user.uid;
         const isAdmin = user.email === 'vokien609@gmail.com';
         navBtn.innerText = isAdmin ? 'Đăng xuất Admin' : 'Đăng xuất';
         navBtn.onclick = window.signOutAdmin;
         navBtn.style.color = 'var(--neon-cyan)';
         navBtn.style.borderColor = 'var(--neon-cyan)';
-
-        // Description keeps the same as admin's default info
         authorDesc.innerHTML = window.defaultAuthorDesc;
 
         const displayName = user.email.split('@')[0];
         if (isAdmin) {
             currentUserRole = 'admin';
-            uploadBtn.style.display = 'flex'; // Hiện nút Upload
+            uploadBtn.style.display = 'flex';
             authorH1.innerHTML = `Chào bạn,<br>Tôi là <span>Bourbon <svg width="24" height="24" style="vertical-align: middle; margin-bottom: 5px;" viewBox="0 0 24 24" fill="var(--neon-cyan)" stroke="var(--neon-cyan)" stroke-width="1"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>`;
             document.getElementById('contributeNavBtn').style.display = 'none';
         } else {
@@ -519,9 +507,8 @@ onAuthStateChanged(auth, (user) => {
             document.getElementById('contributeNavBtn').style.display = 'inline-flex';
         }
         fetchUserLevelAvatar(user.uid);
-        fetchTags(); // Reload tags to show private/vault options
+        fetchTags(); 
     } else {
-        // Logged out
         currentUserUid = null;
         currentUserLikedDocs = [];
         currentUserVault = [];
@@ -530,17 +517,15 @@ onAuthStateChanged(auth, (user) => {
         navBtn.onclick = window.openAuthModal;
         navBtn.style.color = '';
         navBtn.style.borderColor = '';
-
         uploadBtn.style.display = 'none';
         document.getElementById('contributeNavBtn').style.display = 'none';
         authorH1.innerHTML = `Chào bạn,<br>Tôi là <span>Bourbon</span>`;
         authorDesc.innerHTML = window.defaultAuthorDesc;
         fetchAdminGlobalAvatar();
-        fetchTags(); // Hide private options
+        fetchTags(); 
     }
 });
 
-// Category Data
 let allDocs = [];
 
 async function fetchTags() {
@@ -551,35 +536,29 @@ async function fetchTags() {
         
         if (currentUserUid) {
             html += '<div class="cat-tag" data-cat="vault" style="color: var(--neon-cyan); border-color: var(--neon-cyan);" onclick="filterDocs(\'vault\', this)">📂 Thư viện của tôi</div>';
-            
             if (currentUserRole === 'vip' || currentUserRole === 'admin' || currentUserRole === 'contributor') {
                 html += '<div class="cat-tag" data-cat="vip" style="color: #ffcc00; border-color: #ffcc00;" onclick="filterDocs(\'vip\', this)">🌟 VIP Hub</div>';
             }
         }
         
-        // Load additional tags from DB
         snap.forEach(d => {
             const tagName = d.data().name;
             if (tagName) {
                 html += `<div class="cat-tag" data-cat="${tagName}" onclick="filterDocs('${tagName}', this)">${tagName}</div>`;
             }
         });
-        
         catDiv.innerHTML = html;
     } catch (e) { console.error("Cannot fetch tags:", e); }
 }
 
 window.filterDocs = function (category, element) {
-    // Update Active Class
     const tags = document.querySelectorAll('#homeCategories .cat-tag');
     tags.forEach(t => t.classList.remove('active'));
     if (element) element.classList.add('active');
 
-    // Render Filtered
     const docGrid = document.getElementById('docGrid');
     let filtered = allDocs;
 
-    // Search Filter Logic
     const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
     if (searchTerm) {
         filtered = filtered.filter(d => 
@@ -590,7 +569,6 @@ window.filterDocs = function (category, element) {
     }
 
     if (category === 'Tất cả') {
-        // Public docs + VIP docs if user has access
         const hasVipAccess = ['admin', 'vip', 'contributor'].includes(currentUserRole);
         filtered = filtered.filter(d => !d.isVipOnly || hasVipAccess);
     } else if (category === 'vault') {
@@ -614,12 +592,9 @@ window.filterDocs = function (category, element) {
     }
 }
 
-// Add search input listener
 document.getElementById('searchInput').addEventListener('input', () => {
     renderCurrentGrid();
 });
-
-// Fetch live data directly
 
 function renderDocs(docsData) {
     let html = '';
@@ -632,15 +607,15 @@ function renderDocs(docsData) {
         const date = data.date || data.createdAt || "Vừa xong";
         const iconSVG = data.iconSVG || `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline>`;
 
-        // Kiểm tra tài liệu mới (7 ngày gần đây)
         let isNew = false;
         if (data.timestamp && data.timestamp.toMillis) {
             isNew = (now - data.timestamp.toMillis()) < sevenDays;
         }
 
         html += `
-        <div class="doc-card liquid-glass">
-            ${isNew ? '<span class="badge-new">🔥 Mới</span>' : ''}
+        <div class="doc-card liquid-glass" style="${data.isPinned ? 'border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 243, 255, 0.15);' : ''}">
+            ${data.isPinned ? '<span class="badge-new" style="background: linear-gradient(135deg, #00f3ff, #b026ff); left: 18px; right: auto;">📌 Đã ghim</span>' : ''}
+            ${isNew ? `<span class="badge-new" style="${data.isPinned ? 'top: 50px;' : ''}">🔥 Mới</span>` : ''}
             <div class="doc-header">
                 <div class="doc-icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -689,18 +664,23 @@ function renderDocs(docsData) {
 
 async function fetchDocuments() {
     const docGrid = document.getElementById('docGrid');
-
     try {
-        // Fetch from Firestore collection "documents"
         const snapshots = await getDocs(collection(db, "documents"));
-
         if (snapshots.empty) {
             docGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--text-secondary);"><p>Chưa có tài liệu nào được chia sẻ trên hệ thống.</p></div>';
         } else {
             allDocs = [];
             snapshots.forEach(doc => allDocs.push({ id: doc.id, ...doc.data() }));
+            
+            allDocs.sort((a, b) => {
+                if (a.isPinned !== b.isPinned) return b.isPinned ? 1 : -1;
+                const timeA = a.timestamp?.toMillis ? a.timestamp.toMillis() : 0;
+                const timeB = b.timestamp?.toMillis ? b.timestamp.toMillis() : 0;
+                return timeB - timeA;
+            });
+
             docGrid.innerHTML = renderDocs(allDocs);
-            showWelcomePopup(allDocs); // ← Hiện popup sau khi tải xong
+            showWelcomePopup(allDocs); 
         }
     } catch (err) {
         console.error("Firebase connection error.", err);
@@ -708,13 +688,11 @@ async function fetchDocuments() {
     }
 }
 
-// ── Welcome Popup Logic ──
 function showWelcomePopup(docs) {
     const today = new Date().toDateString();
     const lastSeen = localStorage.getItem('welcomeLastSeen');
-    if (lastSeen === today) return; // Đã xem hôm nay rồi, bỏ qua
+    if (lastSeen === today) return; 
 
-    // Đếm tài liệu mới trong 24 giờ qua
     const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
     const newCount = docs.filter(d => d.timestamp && d.timestamp.toMillis && d.timestamp.toMillis() > oneDayAgo).length;
 
@@ -729,7 +707,6 @@ function showWelcomePopup(docs) {
         body.innerHTML = `Kho tài nguyên của Bourbon luôn miễn phí và được cập nhật thường xuyên.<br>Nếu thấy hữu ích, hãy cho mình biết nhé! 💛`;
     }
 
-    // Hiện popup sau 800ms delay để trang load xong
     setTimeout(() => {
         document.getElementById('welcomeOverlay').classList.add('active');
     }, 800);
@@ -741,11 +718,9 @@ window.closeWelcome = function () {
     localStorage.setItem('welcomeLastSeen', new Date().toDateString());
 };
 
-// Click ra ngoài để đóng
 document.getElementById('welcomeOverlay').addEventListener('click', function (e) {
     if (e.target === this) window.closeWelcome();
 });
 
-// Initialize fetch
 fetchTags();
 fetchDocuments();
