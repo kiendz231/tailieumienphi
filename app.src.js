@@ -624,7 +624,6 @@
         function renderDocs(docsData) {
             let html = '';
             const now = Date.now();
-            const sevenDays = 7 * 24 * 60 * 60 * 1000;
 
             docsData.forEach((data) => {
                 const title = data.title || "Tài liệu không tên";
@@ -632,16 +631,11 @@
                 const date = data.date || data.createdAt || "Vừa xong";
                 const iconSVG = data.iconSVG || `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline>`;
 
-                // Kiểm tra tài liệu mới (7 ngày gần đây)
-                let isNew = false;
-                if (data.timestamp && data.timestamp.toMillis) {
-                    isNew = (now - data.timestamp.toMillis()) < sevenDays;
-                }
+                // (isNew logic removed per user request)
 
                 html += `
                 <div class="doc-card liquid-glass" style="${data.isPinned ? 'border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 243, 255, 0.15);' : ''}">
                     ${data.isPinned ? '<span class="badge-new" style="background: linear-gradient(135deg, #00f3ff, #b026ff); left: 18px; right: auto;">📌 Đã ghim</span>' : ''}
-                    ${isNew ? `<span class="badge-new" style="${data.isPinned ? 'top: 50px;' : ''}">🔥 Mới</span>` : ''}
                     <div class="doc-header">
                         <div class="doc-icon">
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
