@@ -639,8 +639,9 @@
                 }
 
                 html += `
-                <div class="doc-card liquid-glass">
-                    ${isNew ? '<span class="badge-new">🔥 Mới</span>' : ''}
+                <div class="doc-card liquid-glass" style="${data.isPinned ? 'border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 243, 255, 0.15);' : ''}">
+                    ${data.isPinned ? '<span class="badge-new" style="background: linear-gradient(135deg, #00f3ff, #b026ff); left: 18px; right: auto;">📌 Đã ghim</span>' : ''}
+                    ${isNew ? `<span class="badge-new" style="${data.isPinned ? 'top: 50px;' : ''}">🔥 Mới</span>` : ''}
                     <div class="doc-header">
                         <div class="doc-icon">
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -699,6 +700,15 @@
                 } else {
                     allDocs = [];
                     snapshots.forEach(doc => allDocs.push({ id: doc.id, ...doc.data() }));
+                    
+                    // Sort: Pinned first, then by timestamp (desc)
+                    allDocs.sort((a, b) => {
+                        if (a.isPinned !== b.isPinned) return b.isPinned ? 1 : -1;
+                        const timeA = a.timestamp?.toMillis ? a.timestamp.toMillis() : 0;
+                        const timeB = b.timestamp?.toMillis ? b.timestamp.toMillis() : 0;
+                        return timeB - timeA;
+                    });
+
                     docGrid.innerHTML = renderDocs(allDocs);
                     showWelcomePopup(allDocs); // ← Hiện popup sau khi tải xong
                 }
