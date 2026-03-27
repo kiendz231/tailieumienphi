@@ -127,26 +127,19 @@
         }
 
         async function fetchAdminGlobalAvatar() {
-            try {
-                const snap = await getDoc(doc(db, "settings", "profile"));
-                const avatarDiv = document.getElementById('authorAvatar');
-                if (snap.exists() && snap.data().avatarUrl) {
-                    avatarDiv.style.backgroundImage = `url('${snap.data().avatarUrl}')`;
-                } else {
-                    const defaultMemes = [
-                        "https://i.postimg.cc/T1QXVkch/tai-xuong-(3).jpg",
-                        "https://i.postimg.cc/qM0R2S4S/kamu-kan.jpg",
-                        "https://i.postimg.cc/WzZktkmZ/tai-xuong-(2).jpg",
-                        "https://i.postimg.cc/QCvF3xRK/tai-xuong-(1).jpg",
-                        "https://i.postimg.cc/zfHPzdbJ/tai-xuong.jpg"
-                    ];
-                    // Random cho chính Admin nếu admin mới tạo chưa setup
-                    avatarDiv.style.backgroundImage = `url('${defaultMemes[Math.floor(Math.random() * defaultMemes.length)]}')`;
-                }
-                avatarDiv.style.backgroundSize = 'cover';
-                avatarDiv.style.backgroundPosition = 'center';
-                avatarDiv.innerHTML = '';
-            } catch (e) { }
+            const avatarDiv = document.getElementById('authorAvatar');
+            const defaultMemes = [
+                "https://i.postimg.cc/T1QXVkch/tai-xuong-(3).jpg",
+                "https://i.postimg.cc/qM0R2S4S/kamu-kan.jpg",
+                "https://i.postimg.cc/WzZktkmZ/tai-xuong-(2).jpg",
+                "https://i.postimg.cc/QCvF3xRK/tai-xuong-(1).jpg",
+                "https://i.postimg.cc/zfHPzdbJ/tai-xuong.jpg"
+            ];
+            const randomAvatar = defaultMemes[Math.floor(Math.random() * defaultMemes.length)];
+            avatarDiv.style.backgroundImage = `url('${randomAvatar}')`;
+            avatarDiv.style.backgroundSize = 'cover';
+            avatarDiv.style.backgroundPosition = 'center';
+            avatarDiv.innerHTML = '';
         }
 
         // UI Variables (Preview Modal)
