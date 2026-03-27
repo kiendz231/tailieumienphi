@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate</title>
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/k4tgtnmv/Gemini-Generated-Image-a1agka1agka1agka.png">
+    <meta name="description"
+        content="Ủng hộ Bourbon để duy trì và phát triển kho tài nguyên học tập miễn phí cho cộng đồng.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --space-dark: #05050a;
+            --neon-cyan: #00f3ff;
+            --neon-purple: #b026ff;
+            --neon-gold: #f6d365;
+            --neon-orange: #fda085;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-highlight: rgba(255, 255, 255, 0.2);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.65);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--space-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── Background Orbs ── */
+        .bg-orbs {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.18;
+            animation: drift 18s ease-in-out infinite alternate;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--neon-purple);
+            top: -150px;
+            right: -100px;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--neon-cyan);
+            bottom: -100px;
+            left: -100px;
+            animation-delay: -6s;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: var(--neon-gold);
+            top: 40%;
+            left: 40%;
+            opacity: 0.12;
+            animation-delay: -12s;
+        }
+
+        @keyframes drift {
+            from {
+                transform: translate(0, 0) scale(1);
+            }
+
+            to {
+                transform: translate(40px, 30px) scale(1.1);
+            }
+        }
+
+        /* ── Liquid Glass ── */
+        .liquid-glass {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(30px) saturate(150%);
+            -webkit-backdrop-filter: blur(30px) saturate(150%);
+            border: 1px solid var(--glass-border);
+        }
+
+        /* ── Nav ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo svg {
+            flex-shrink: 0;
+            color: var(--neon-cyan);
+            -webkit-text-fill-color: unset;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+
+        /* ── Main Layout ── */
+        main {
+            position: relative;
+            z-index: 1;
+            max-width: 960px;
+            margin: 60px auto;
+            padding: 0 20px 80px;
+        }
+
+        /* ── Hero ── */
+        .donate-hero {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .donate-hero .icon-wrap {
+            width: 90px;
+            height: 90px;
+            border-radius: 28px;
+            margin: 0 auto 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(246, 211, 101, 0.2), rgba(253, 160, 133, 0.2));
+            border: 1px solid rgba(246, 211, 101, 0.3);
+            box-shadow: 0 0 40px rgba(246, 211, 101, 0.2);
+            animation: heart-beat 2s ease-in-out infinite;
+        }
+
+        @keyframes heart-beat {
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 30px rgba(246, 211, 101, 0.2);
+            }
+
+            50% {
+                transform: scale(1.06);
+                box-shadow: 0 0 50px rgba(246, 211, 101, 0.4);
+            }
+        }
+
+        .donate-hero h1 {
+            font-size: clamp(32px, 5vw, 52px);
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--neon-gold), var(--neon-orange));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .donate-hero p {
+            color: var(--text-secondary);
+            font-size: 17px;
+            line-height: 1.7;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+
+
+        /* ── Grid ── */
+        .donate-grid {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .donate-grid .panel {
+            max-width: 420px;
+            width: 100%;
+        }
+
+        /* ── QR Panel ── */
+        .panel {
+            border-radius: 28px;
+            padding: 36px 30px;
+        }
+
+        .panel h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qr-wrap {
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(246, 211, 101, 0.2);
+            line-height: 0;
+        }
+
+        .qr-wrap img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 20px;
+        }
+
+        .qr-note {
+            font-size: 12px;
+            color: #777;
+            margin-top: 10px;
+        }
+
+
+
+        /* ── Thank You Note ── */
+        .thanks-box {
+            margin-top: 40px;
+            padding: 30px 36px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(246, 211, 101, 0.06), rgba(253, 160, 133, 0.06));
+            border: 1px solid rgba(246, 211, 101, 0.2);
+            text-align: center;
+        }
+
+        .thanks-box p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .thanks-box strong {
+            color: var(--neon-gold);
+        }
+
+        /* ── Toast ── */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: rgba(0, 243, 255, 0.12);
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(20px);
+            z-index: 999;
+        }
+
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ── Mobile ── */
+        @media (max-width: 680px) {
+            nav {
+                padding: 15px 20px;
+            }
+
+            main {
+                margin: 30px auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <nav class="liquid-glass">
+        <div class="logo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+            BOURBON FULLBUSTER
+        </div>
+        <a href="index.html" class="back-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Quay lại
+        </a>
+    </nav>
+
+    <main>
+        <!-- Hero -->
+        <div class="donate-hero">
+            <div class="icon-wrap">
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="url(#gold)" stroke="none">
+                    <defs>
+                        <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#f6d365" />
+                            <stop offset="100%" style="stop-color:#fda085" />
+                        </linearGradient>
+                    </defs>
+                    <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+            </div>
+            <h1>Ủng Hộ Tác Giả</h1>
+            <p>Mọi sự ủng hộ dù nhỏ hay lớn đều giúp mình duy trì kho tài nguyên và tạo ra thêm nhiều nội dung chất
+                lượng hơn. Cảm ơn bạn rất nhiều💛</p>
+        </div>
+
+
+        <!-- QR + Bank Info -->
+        <div class="donate-grid">
+            <!-- QR Code Panel -->
+            <div class="panel liquid-glass">
+                <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--neon-gold)"
+                        stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="3" height="3"></rect>
+                    </svg>
+                    Quét QR chuyển tiền
+                </h3>
+                <div class="qr-wrap">
+                    <!-- Thay link ảnh QR của bạn vào đây -->
+                    <img src="https://i.postimg.cc/mDTmPrMj/z7658264366642-a408aaf75c4c56421b5642f8d42e6f2a.jpg"
+                        alt="QR Code chuyển tiền">
+                </div>
+                <p style="font-size: 13px; color: var(--text-secondary); text-align: center; line-height: 1.6;">
+                    Mở app ngân hàng → Quét QR → Nhập số tiền → Chuyển khoản
+                </p>
+            </div>
+        </div>
+        </div>
+
+        <!-- Thank You -->
+        <div class="thanks-box liquid-glass">
+            <div style="font-size: 36px; margin-bottom: 16px;">🙏</div>
+            <p>
+                Cảm ơn bạn đã quan tâm đến dự án <strong>Tài liệu miễn phí</strong>.<br>
+                Kho tài nguyên này được xây dựng hoàn toàn <strong>miễn phí</strong> và sẽ luôn như vậy.<br>
+                Sự ủng hộ của bạn giúp mình có thêm động lực để tiếp tục tạo ra những nội dung chất lượng hơn cho cộng
+                đồng.<br><br>
+                <strong>— Bourbon Fullbuster 💛</strong>
+            </p>
+        </div>
+    </main>
+
+    <div id="toast">✅ Đã sao chép!</div>
+
+    <script>
+        function showToast() {
+            const t = document.getElementById('toast');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2500);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "antigravity-document-hub",
+  "version": "1.0.0",
+  "description": "Premium Document Management Dashboard with Liquid Glass UI",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve .",
+    "build": "echo 'No build step needed for static site'"
+  },
+  "dependencies": {
+    "serve": "^14.2.0"
+  },
+  "keywords": [
+    "document-management",
+    "liquid-glass",
+    "firebase",
+    "educational-tools"
+  ],
+  "author": "Bourbon",
+  "license": "MIT"
+}

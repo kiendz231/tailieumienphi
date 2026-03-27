@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bourbon Admin | Hệ thống quản trị nội dung</title>
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/k4tgtnmv/Gemini-Generated-Image-a1agka1agka1agka.png">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --space-dark: #05050a;
+            --neon-cyan: #00f3ff;
+            --neon-purple: #b026ff;
+            --neon-red: #ff3c6e;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-highlight: rgba(255, 255, 255, 0.2);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--space-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            opacity: 0;
+            /* Hide initially until auth check */
+            transition: opacity 0.5s ease;
+        }
+
+        /* Fluid Background */
+        .bg-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #0a0a16 0%, #030305 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(0, 243, 255, 0.5);
+            top: -100px;
+            left: -100px;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: rgba(176, 38, 255, 0.3);
+            bottom: -200px;
+            right: -100px;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(100px, 50px) scale(1.2);
+            }
+
+            100% {
+                transform: translate(-50px, 100px) scale(0.9);
+            }
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .liquid-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-highlight);
+            border-left: 1px solid var(--glass-highlight);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--glass-border);
+            background: rgba(5, 5, 10, 0.5);
+            backdrop-filter: blur(30px);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--neon-red);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-shadow: 0 0 15px rgba(255, 60, 110, 0.5);
+        }
+
+        .btn-nav {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-nav:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-5px);
+        }
+
+        /* General Layout */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            gap: 40px;
+        }
+
+        .panel {
+            padding: 40px;
+            border-radius: 30px;
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* ── Toggle Switch ── */
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 20px;
+            border-radius: 16px;
+            background: rgba(0, 243, 255, 0.04);
+            border: 1px solid rgba(0, 243, 255, 0.15);
+            margin-bottom: 20px;
+        }
+
+        .toggle-row .toggle-label {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .toggle-row .toggle-sub {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 3px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            border: 1px solid var(--glass-border);
+            transition: 0.3s;
+        }
+
+        .slider:before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            left: 3px;
+            bottom: 3px;
+            background: var(--text-secondary);
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        input:checked+.slider {
+            background: rgba(0, 243, 255, 0.25);
+            border-color: var(--neon-cyan);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(24px);
+            background: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        h2::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 24px;
+            border-radius: 4px;
+            background: var(--neon-cyan);
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+
+        /* Inputs */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="url"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        option {
+            background: var(--space-dark);
+            color: white;
+        }
+
+        /* Buttons */
+        .btn-submit {
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(176, 38, 255, 0.4);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-delete {
+            background: rgba(255, 60, 110, 0.2);
+            color: var(--neon-red);
+            border: 1px solid rgba(255, 60, 110, 0.4);
+        }
+
+        .btn-delete:hover {
+            background: rgba(255, 60, 110, 0.4);
+        }
+
+        .btn-edit {
+            background: rgba(0, 243, 255, 0.2);
+            color: var(--neon-cyan);
+            border: 1px solid rgba(0, 243, 255, 0.4);
+        }
+
+        .btn-edit:hover {
+            background: rgba(0, 243, 255, 0.4);
+        }
+
+        /* Tag System */
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .tag-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            font-size: 14px;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            color: var(--neon-red);
+            font-weight: bold;
+        }
+
+        /* Document List */
+        .admin-doc-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s;
+            gap: 20px;
+        }
+
+        .admin-doc-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--neon-cyan);
+        }
+
+        .doc-info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .doc-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .doc-meta {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            gap: 15px;
+        }
+
+        /* ── Admin Controls ── */
+        .admin-controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .admin-search {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 10px 15px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .admin-filter {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 10px 15px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            min-width: 140px;
+        }
+
+        .doc-actions {
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .action-btn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid transparent;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--space-dark);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Responsive Mobile Layout */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+                text-align: center;
+            }
+
+            .container {
+                padding: 0 10px;
+                margin: 20px auto;
+            }
+
+            .panel {
+                padding: 25px;
+                border-radius: 20px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            .admin-doc-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+                text-align: left;
+            }
+
+            .doc-actions {
+                width: 100%;
+                display: flex;
+            }
+
+            .action-btn {
+                flex: 1;
+                justify-content: center;
+                padding: 10px;
+            }
+
+            #uploadFormSection div[style*="grid"] {
+                grid-template-columns: 1fr !important;
+            }
+
+            #docForm>div[style*="display: flex"] {
+                flex-direction: column;
+            }
+
+            .panel>div[style*="display: flex; gap: 15px; margin-top: 10px;"] {
+                flex-direction: column;
+            }
+
+            #memeAvatars {
+                flex-direction: row !important;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="loading-overlay" id="loadingScreen">
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="var(--neon-cyan)" stroke-width="2"
+            style="animation: spin 1s linear infinite;">
+            <circle cx="12" cy="12" r="10" stroke-opacity="0.2"></circle>
+            <path d="M12 2a10 10 0 0 1 10 10"></path>
+        </svg>
+        <p style="color: var(--text-secondary); font-weight: 500; font-size: 18px;">Đang xác thực hệ thống trung tâm...
+        </p>
+    </div>
+
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            ADMIN ZONE
+        </div>
+        <a href="index.html" class="btn-nav">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Trở về trang khách
+        </a>
+    </nav>
+
+    <div class="container">
+
+        <!-- Tags Manager Panel -->
+        <div class="panel liquid-glass">
+            <h2>🏷️ Quản Lý Phân Loại (Tags)</h2>
+            <p class="subtitle">Thêm các loại thẻ chuyên ngành để phân loại tài liệu (Ví dụ: Toán, Tiếng Anh,...)</p>
+
+            <div style="display: flex; gap: 15px;">
+                <input type="text" id="newTagName" placeholder="Nhập tên tag mới..." style="flex: 1;">
+                <button class="btn-submit" style="width: auto; margin:0; padding: 15px 25px;"
+                    onclick="handleAddTag()">Thêm Tag</button>
+            </div>
+
+            <div class="tags-container" id="tagsList">
+                <div style="color: var(--text-secondary); font-size: 14px;">Đang tải danh sách tag...</div>
+            </div>
+        </div>
+        <!-- Upload/Edit Form Panel -->
+        <div class="panel liquid-glass" id="uploadFormSection">
+            <h2 id="formHeader">📝 Soạn Thảo Tài Liệu</h2>
+            <p class="subtitle">Đăng tải hoặc chỉnh sửa bài viết hiển thị ra màn hình chính.</p>
+
+            <form id="docForm" onsubmit="event.preventDefault(); handleSaveDocument();">
+                <input type="hidden" id="editDocId">
+
+                <div class="form-group">
+                    <label>Tên tài liệu / Tiêu đề bài viết</label>
+                    <input type="text" id="docTitle" placeholder="Ví dụ: Tài liệu Ôn tập Tiếng Anh Học kì 1" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Mô tả chi tiết (Tùy chọn)</label>
+                    <textarea id="docDesc"
+                        placeholder="Thông tin nội dung, tác giả, file đính kèm... (có thể bỏ trống)"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Phân loại (Tag)</label>
+                    <select id="docType" required>
+                        <option value="">-- Chọn một Tag (Cần tạo tag trước) --</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Liên kết Tải về (Google Drive, Dropbox...)</label>
+                    <input type="url" id="docUrl" placeholder="https://..." required>
+                </div>
+
+                <div class="form-group">
+                    <label>🎥 Link Video Hướng Dẫn (Tùy chọn)</label>
+                    <input type="url" id="docVideo"
+                        placeholder="Dán link YouTube, Google Drive video... (có thể bỏ trống)">
+                </div>
+
+                <div class="toggle-row">
+                    <div>
+                        <div class="toggle-label">👁️ Cho phép Xem trước tài liệu</div>
+                        <div class="toggle-sub">Người dùng có thể xem nội dung trước khi tải xuống</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="docAllowPreview" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-row" style="background: rgba(255, 204, 0, 0.05); border-color: rgba(255, 204, 0, 0.2);">
+                    <div>
+                        <div class="toggle-label" style="color: #ffcc00;">🌟 Tài liệu VIP (Exclusive)</div>
+                        <div class="toggle-sub">Chỉ VIP/Contributor mới có thể xem tài liệu này</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="docIsVipOnly">
+                        <span class="slider" style="border-color: rgba(255, 204, 0, 0.3);"></span>
+                    </label>
+                </div>
+
+                <div id="statusMsg" style="text-align: center; margin-bottom: 20px; font-weight: 500;"></div>
+
+                <div style="display: flex; gap: 15px;">
+                    <button type="submit" id="submitBtn" class="btn-submit" style="flex: 1;">Đăng Tài Liệu</button>
+                    <button type="button" id="cancelEditBtn" class="btn-submit btn-delete"
+                        style="flex: 1; display: none;" onclick="cancelEditMode()">Hủy Chỉnh Sửa</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Document Management Panel -->
+        <div class="panel liquid-glass">
+            <h2>📚 Quản Lý Kho Dữ Liệu</h2>
+            <p class="subtitle">Xem lại, chỉnh sửa hoặc xóa vĩnh viễn các file đang công khai.</p>
+
+            <div class="admin-controls">
+                <input type="text" id="adminSearch" class="admin-search" placeholder="🔍 Tìm tên tài liệu..."
+                    oninput="filterAdminDocs()">
+                <select id="adminTagFilter" class="admin-filter" onchange="filterAdminDocs()">
+                    <option value="">🏷️ Tất cả Tag</option>
+                </select>
+            </div>
+
+            <div id="adminDocList">
+                <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" class="spin" stroke="currentColor"
+                        stroke-width="2" style="animation: spin 1s linear infinite;">
+                        <line x1="12" y1="2" x2="12" y2="6"></line>
+                        <line x1="12" y1="18" x2="12" y2="22"></line>
+                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                        <line x1="2" y1="12" x2="6" y2="12"></line>
+                        <line x1="18" y1="12" x2="22" y2="12"></line>
+                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                        <line x1="16.24" y1="4.93" x2="19.07" y2="7.76"></line>
+                    </svg>
+                    <p style="margin-top: 15px;">Đang tải danh sách tài liệu...</p>
+                </div>
+            </div>
+        </div>
+
+
+    <!-- Submissions Review Panel -->
+    <div class="panel liquid-glass" style="margin-top: 30px;">
+        <h2>📥 Đóng Góp Chờ Duyệt</h2>
+        <p class="subtitle">Tài liệu do người dùng đóng góp. Duyệt để thêm vào kho hoặc từ chối.</p>
+        <div id="submissionsList">
+            <div style="text-align:center; padding:30px; color:var(--text-secondary);">Đang tải...</div>
+        </div>
+        </div>
+
+        <!-- User Management Panel -->
+        <div class="panel liquid-glass" style="margin-top: 40px;">
+            <h2>👥 Quản Lý Người Dùng</h2>
+            <p class="subtitle">Nâng cấp hạng thành viên (VIP, Contributor) cho người dùng.</p>
+
+            <div class="admin-controls" style="margin-bottom: 20px;">
+                <input type="text" id="userSearch" class="admin-search" placeholder="🔍 Tìm kiếm Email người dùng..." oninput="filterUsers()">
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--glass-border); text-align: left;">
+                            <th style="padding: 15px; color: var(--text-secondary);">Email</th>
+                            <th style="padding: 15px; color: var(--text-secondary);">UID</th>
+                            <th style="padding: 15px; color: var(--text-secondary);">Hạng Hiện Tại</th>
+                            <th style="padding: 15px; color: var(--text-secondary);">Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <tr>
+                            <td colspan="4" style="text-align:center; padding:30px; color:var(--text-secondary);">Đang tải người dùng...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Firebase System -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, getDoc, setDoc, updateDoc, deleteDoc, doc, serverTimestamp, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBnP8V6xWabk0cfGhwY4AdPX829rPPRnf4",
+            authDomain: "bourbon-d0505.firebaseapp.com",
+            projectId: "bourbon-d0505",
+            storageBucket: "bourbon-d0505.firebasestorage.app",
+            messagingSenderId: "935278237286",
+            appId: "1:935278237286:web:2b8183abb241ac932fffa7",
+            measurementId: "G-TEV7YQWQBZ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // UI Refs
+        const tagsListUI = document.getElementById('tagsList');
+        const docTypeSelect = document.getElementById('docType');
+        const adminDocList = document.getElementById('adminDocList');
+
+        // ==== AUTH SECURITY ====
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email === 'vokien609@gmail.com') {
+                document.body.style.opacity = '1';
+                setTimeout(() => { document.getElementById('loadingScreen').style.display = 'none'; }, 500);
+
+                // Init load
+                loadTags();
+                loadDocs();
+                loadAvatar();
+                loadSubmissions();
+                loadUsers();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // ==== TAG MANAGEMENT ====
+        async function loadTags() {
+            try {
+                const q = query(collection(db, "tags"), orderBy("name"));
+                const snapshots = await getDocs(q);
+
+                tagsListUI.innerHTML = '';
+                docTypeSelect.innerHTML = '<option value="">-- Chọn phân loại bổ sung --</option>'; // Default options
+                docTypeSelect.innerHTML += '<option value="Toán">Toán</option>';
+                docTypeSelect.innerHTML += '<option value="Tiếng Anh">Tiếng Anh</option>';
+                docTypeSelect.innerHTML += '<option value="Học thuật">Học thuật</option>';
+
+                if (snapshots.empty) {
+                    tagsListUI.innerHTML = '<span style="color:var(--text-secondary); font-size:14px;">Chưa có thẻ tùy chỉnh nào. Các thẻ mặc định: Toán, Tiếng Anh, Học thuật đã được thêm.</span>';
+                }
+
+                snapshots.forEach((docSnap) => {
+                    const data = docSnap.data();
+
+                    // Add to UI Tag list
+                    const div = document.createElement('div');
+                    div.className = 'tag-badge';
+                    div.innerHTML = `${data.name} <span class="tag-remove" onclick="handleDeleteTag('${docSnap.id}', '${data.name}')">✖</span>`;
+                    tagsListUI.appendChild(div);
+
+                    // Add to Select dropdown
+                    const opt = document.createElement('option');
+                    opt.value = data.name;
+                    opt.innerText = data.name;
+                    docTypeSelect.appendChild(opt);
+                });
+            } catch (e) {
+                console.error("Lỗi tải Tags:", e);
+                tagsListUI.innerHTML = '<span style="color:var(--neon-red)">Lỗi khi tải thẻ phân loại.</span>';
+            }
+        }
+
+        window.handleAddTag = async function () {
+            const input = document.getElementById('newTagName');
+            const val = input.value.trim();
+            if (!val) return alert("Vui lòng nhập tên Tag!");
+
+            try {
+                await addDoc(collection(db, "tags"), { name: val, timestamp: serverTimestamp() });
+                input.value = '';
+                loadTags(); // Reload
+            } catch (e) {
+                alert("Lỗi thêm thẻ: " + e.message);
+            }
+        }
+
+        window.handleDeleteTag = async function (id, name) {
+            if (!confirm(`Xóa vĩnh viễn thẻ [${name}] khỏi hệ thống?`)) return;
+            try {
+                await deleteDoc(doc(db, "tags", id));
+                loadTags();
+            } catch (e) {
+                alert("Lỗi khi xóa thẻ: " + e.message);
+            }
+        }
+
+        // ==== AVATAR MANAGEMENT ====
+        window.selectAvatar = function (url) {
+            document.getElementById('customAvatarUrl').value = url;
+            const imgs = document.querySelectorAll('#memeAvatars img');
+            imgs.forEach(i => i.style.borderColor = 'transparent');
+            event.target.style.borderColor = 'var(--neon-cyan)';
+        }
+
+        async function loadAvatar() {
+            try {
+                const snap = await getDoc(doc(db, "settings", "profile"));
+                if (snap.exists() && snap.data().avatarUrl) {
+                    document.getElementById('customAvatarUrl').value = snap.data().avatarUrl;
+                }
+            } catch (e) { console.error("Load avatar err:", e); }
+        }
+
+        window.handleSaveAvatar = async function () {
+            const url = document.getElementById('customAvatarUrl').value.trim();
+            const status = document.getElementById('avatarStatusMsg');
+            if (!url) {
+                status.style.color = 'var(--neon-red)';
+                status.innerText = 'Vui lòng chọn hoặc nhập URL ảnh!';
+                return;
+            }
+            try {
+                await setDoc(doc(db, "settings", "profile"), { avatarUrl: url }, { merge: true });
+                status.style.color = 'var(--neon-cyan)';
+                status.innerText = 'Đã lưu Avatar thành công! Bạn có thể ra trang khách để xem thành quả.';
+                setTimeout(() => status.innerText = '', 4000);
+            } catch (e) {
+                status.style.color = 'var(--neon-red)';
+                status.innerText = 'Lỗi: ' + e.message;
+            }
+        }
+
+        // ==== DOCUMENT MANAGEMENT ====
+        let globalDocs = []; // Store fetched docs for easy access when editing
+
+        async function loadDocs() {
+            try {
+                const q = query(collection(db, "documents"), orderBy("timestamp", "desc"));
+                const snapshots = await getDocs(q);
+                globalDocs = [];
+                snapshots.forEach((docSnap) => {
+                    globalDocs.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                if (globalDocs.length === 0) {
+                    adminDocList.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-secondary);">Chưa có tài liệu nào trong cơ sở dữ liệu.</div>';
+                    return;
+                }
+
+                const filterSelect = document.getElementById('adminTagFilter');
+                const uniqueTags = [...new Set(globalDocs.map(d => d.category))].filter(Boolean);
+                let filterHtml = '<option value="">🏷️ Tất cả Tag</option>';
+                uniqueTags.forEach(t => filterHtml += `<option value="${t}">${t}</option>`);
+                filterSelect.innerHTML = filterHtml;
+
+                renderAdminGrid(globalDocs);
+
+            } catch (e) {
+                console.error("Lỗi tải Docs:", e);
+                adminDocList.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--neon-red);">Cảnh báo: Lỗi khi tải dữ liệu. Hãy đảm bảo quy tắc Database trên Firebase được cập nhật.</div>';
+            }
+        }
+
+        window.filterAdminDocs = function () {
+            const query = document.getElementById('adminSearch').value.toLowerCase().trim();
+            const tagFilter = document.getElementById('adminTagFilter').value;
+
+            let filtered = globalDocs;
+            if (query) {
+                filtered = filtered.filter(d => d.title.toLowerCase().includes(query));
+            }
+            if (tagFilter) {
+                filtered = filtered.filter(d => d.category === tagFilter);
+            }
+
+            renderAdminGrid(filtered);
+        }
+
+
+
+        function renderAdminGrid(docs) {
+            const adminDocList = document.getElementById('adminDocList');
+            if (docs.length === 0) {
+                adminDocList.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-secondary);">Không tìm thấy tài liệu phù hợp.</div>';
+                return;
+            }
+
+            let html = '';
+            docs.forEach((data) => {
+                const title = data.title || "Tài liệu trống";
+                const cat = data.category || "General";
+                const date = data.date || "Unknown";
+
+                html += `
+                    <div class="admin-doc-item">
+                        <div class="doc-info">
+                            <div class="doc-title" title="${title}">${title}</div>
+                            <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">🏷️ ${cat} &nbsp; | &nbsp; 📅 ${date}</div>
+                        </div>
+                        <div class="doc-actions">
+                            <button class="action-btn btn-edit" onclick="startEditMode('${data.id}')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                                ✏️
+                            </button>
+                            <button class="action-btn btn-delete" onclick="handleDeleteDoc('${data.id}', '${title.replace(/'/g, "\\'")}')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            adminDocList.innerHTML = html;
+        }
+
+        window.handleDeleteDoc = async function (id, title) {
+            if (!confirm(`Cảnh báo hệ thống:\nBạn có chắc chắn muốn xóa vĩnh viễn tài liệu "${title}" không? Hành động này không thể hoàn tác.`)) return;
+            try {
+                await deleteDoc(doc(db, "documents", id));
+                loadDocs(); // Reload local list instantly
+            } catch (e) {
+                alert("Lỗi khi xóa: " + e.message);
+            }
+        }
+
+        // ==== CREATE / UPDATE LOGIC ====
+        window.startEditMode = function (id) {
+            const documentData = globalDocs.find(d => d.id === id);
+            if (!documentData) return;
+
+            // Fill form
+            document.getElementById('editDocId').value = id;
+            document.getElementById('docTitle').value = documentData.title;
+            document.getElementById('docDesc').value = documentData.description;
+            document.getElementById('docType').value = documentData.category;
+            document.getElementById('docUrl').value = documentData.fileUrl || "";
+            document.getElementById('docVideo').value = documentData.videoUrl || "";
+            document.getElementById('docAllowPreview').checked = documentData.allowPreview !== false;
+            document.getElementById('docIsVipOnly').checked = documentData.isVipOnly === true;
+
+            // Change UI states
+            document.getElementById('formHeader').innerHTML = '✏️ Chỉnh Sửa Tài Liệu';
+            document.getElementById('submitBtn').innerText = 'Lưu Cập Nhật';
+            document.getElementById('submitBtn').style.background = 'rgba(0, 243, 255, 0.3)';
+            document.getElementById('submitBtn').style.border = '1px solid var(--neon-cyan)';
+            document.getElementById('cancelEditBtn').style.display = 'block';
+
+            // Scroll to form automatically
+            document.getElementById('uploadFormSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.cancelEditMode = function () {
+            document.getElementById('docForm').reset();
+            document.getElementById('editDocId').value = '';
+
+            document.getElementById('formHeader').innerHTML = '📝 Đăng Tài Liệu Mới';
+            document.getElementById('submitBtn').innerText = 'Đăng Tài Liệu';
+            document.getElementById('submitBtn').style.background = 'linear-gradient(45deg, var(--neon-cyan), var(--neon-purple))';
+            document.getElementById('submitBtn').style.border = 'none';
+            document.getElementById('cancelEditBtn').style.display = 'none';
+        }
+
+        window.handleSaveDocument = async function () {
+            const btn = document.getElementById('submitBtn');
+            const status = document.getElementById('statusMsg');
+
+            const editId = document.getElementById('editDocId').value;
+            const title = document.getElementById('docTitle').value;
+            const desc = document.getElementById('docDesc').value;
+            const type = document.getElementById('docType').value;
+            const url = document.getElementById('docUrl').value;
+            const videoUrl = document.getElementById('docVideo').value;
+            const allowPreview = document.getElementById('docAllowPreview').checked;
+            const isVipOnly = document.getElementById('docIsVipOnly').checked;
+
+            // Assign smart icon based on user input
+            let iconSVG = `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline>`; // Default generic
+            if (title.toLowerCase().includes("figma") || type.toLowerCase().includes("ui")) {
+                iconSVG = `<path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>`;
+            } else if (title.toLowerCase().includes("code") || type.toLowerCase().includes("script")) {
+                iconSVG = `<polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline>`;
+            } else if (title.toLowerCase().includes("báo cáo") || title.toLowerCase().includes("excel")) {
+                iconSVG = `<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line>`;
+            }
+
+            const payload = {
+                title: title,
+                description: desc,
+                category: type,
+                fileUrl: url,
+                videoUrl: videoUrl || null,
+                allowPreview: allowPreview,
+                isVipOnly: isVipOnly,
+                iconSVG: iconSVG
+            };
+
+            btn.disabled = true;
+            btn.innerHTML = 'Hệ thống đang xử lý...';
+            status.style.color = 'var(--text-secondary)';
+            status.innerText = '';
+
+            try {
+                if (editId) {
+                    // CẬP NHẬT (Update)
+                    await updateDoc(doc(db, "documents", editId), payload);
+                    status.style.color = '#00f3ff';
+                    status.innerText = 'Cập nhật tài liệu thành công!';
+                    cancelEditMode();
+                } else {
+                    // TẠO MỚI (Create)
+                    const today = new Date();
+                    payload.date = today.getDate().toString().padStart(2, '0') + '/' + (today.getMonth() + 1).toString().padStart(2, '0') + '/' + today.getFullYear();
+                    payload.timestamp = serverTimestamp();
+
+                    await addDoc(collection(db, "documents"), payload);
+                    status.style.color = '#00f3ff';
+                    status.innerText = 'Đăng tài liệu thành công!';
+                    document.getElementById('docForm').reset();
+                }
+
+                // Mở rộng thời gian chờ một chút rồi tải lại form danh sách
+                setTimeout(() => {
+                    status.innerText = '';
+                    loadDocs();
+                }, 2000);
+
+            } catch (e) {
+                console.error("Firebase Error:", e);
+                status.style.color = 'var(--neon-red)';
+                status.innerText = 'Báo cáo lỗi: ' + e.message;
+            } finally {
+                btn.disabled = false;
+                if (!editId) btn.innerHTML = 'Đăng Tài Liệu';
+            }
+        };
+
+
+        // ── Submissions Review ──
+        let allSubmissions = [];
+
+        async function loadSubmissions() {
+            const list = document.getElementById('submissionsList');
+            try {
+                const snap = await getDocs(query(collection(db, 'submissions'), orderBy('timestamp', 'desc')));
+                allSubmissions = [];
+                snap.forEach(d => allSubmissions.push({ id: d.id, ...d.data() }));
+                renderSubmissions();
+            } catch (e) {
+                list.innerHTML = `<p style="color:#ff6b6b; padding:20px">Lỗi tải submissions: ${e.message}</p>`;
+            }
+        }
+
+        function renderSubmissions() {
+            const list = document.getElementById('submissionsList');
+            const pending = allSubmissions.filter(s => s.status === 'pending');
+            if (pending.length === 0) {
+                list.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-secondary);">
+                    <div style="font-size:40px; margin-bottom:12px;">🎉</div>
+                    <p>Không có đóng góp nào chờ duyệt.</p></div>`;
+                return;
+            }
+            list.innerHTML = pending.map(s => {
+                const date = s.timestamp?.toDate ? s.timestamp.toDate().toLocaleDateString('vi-VN') : 'Vừa xong';
+                return `<div style="padding:20px; border-radius:16px; border:1px solid var(--glass-border); background:rgba(255,255,255,0.02); margin-bottom:14px;">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap;">
+                        <div style="flex:1;">
+                            <div style="font-weight:700; font-size:16px; margin-bottom:6px;">${s.title}</div>
+                            <div style="font-size:13px; color:var(--text-secondary); margin-bottom:4px; display:flex; align-items:center; gap:8px;">
+                                🏷️ <input type="text" id="editTag_${s.id}" value="${s.category}" style="background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); color:var(--neon-cyan); padding:2px 8px; border-radius:6px; font-size:12px; width:150px; outline:none;" title="Chỉnh sửa tag nếu cần">
+                                &nbsp;|&nbsp; 📅 ${date}
+                            </div>
+                            ${s.description ? `<div style="font-size:13px; color:var(--text-secondary); margin-bottom:6px;">${s.description}</div>` : ''}
+                            <div style="font-size:12px; margin-top:6px; display:flex; flex-direction:column; gap:4px;">
+                                <a href="${s.fileUrl}" target="_blank" style="color:var(--neon-cyan); text-decoration:none;">🔗 ${s.fileUrl.substring(0, 60)}...</a>
+                                ${s.videoUrl ? `<a href="${s.videoUrl}" target="_blank" style="color:var(--neon-purple); text-decoration:none;">🎥 ${s.videoUrl.substring(0, 50)}...</a>` : ''}
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:10px; flex-shrink:0;">
+                            <button onclick="approveSubmission('${s.id}')"
+                                style="padding:10px 18px; border-radius:12px; border:none; background:rgba(0,243,255,0.2); border:1px solid var(--neon-cyan); color:var(--neon-cyan); font-family:'Outfit',sans-serif; font-weight:600; font-size:14px; cursor:pointer; transition:all 0.2s;"
+                                onmouseover="this.style.background='rgba(0,243,255,0.35)'" onmouseout="this.style.background='rgba(0,243,255,0.2)'">
+                                ✅ Duyệt
+                            </button>
+                            <button onclick="rejectSubmission('${s.id}')"
+                                style="padding:10px 18px; border-radius:12px; border:none; background:rgba(255,50,50,0.1); border:1px solid #ff5555; color:#ff5555; font-family:'Outfit',sans-serif; font-weight:600; font-size:14px; cursor:pointer; transition:all 0.2s;"
+                                onmouseover="this.style.background='rgba(255,50,50,0.25)'" onmouseout="this.style.background='rgba(255,50,50,0.1)'">
+                                ❌ Từ chối
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        window.approveSubmission = async function (id) {
+            const s = allSubmissions.find(x => x.id === id);
+            if (!s) return;
+            const editedTag = document.getElementById(`editTag_${id}`)?.value.trim();
+            const finalTag = editedTag || s.category;
+
+            if (!confirm(`Duyệt và thêm "${s.title}" vào kho tài liệu (Tag: ${finalTag})?`)) return;
+
+            try {
+                // Tự động thêm tag vào hệ thống nếu chưa có
+                const tagsSnap = await getDocs(collection(db, 'tags'));
+                let tagExists = false;
+                tagsSnap.forEach(t => { if (t.data().name === finalTag) tagExists = true; });
+                if (!tagExists) {
+                    await addDoc(collection(db, 'tags'), { name: finalTag, timestamp: serverTimestamp() });
+                    loadTags(); // Cập nhật danh sách tags hiển thị trên Admin
+                }
+
+                const today = new Date();
+                const dateStr = today.getDate().toString().padStart(2, '0') + '/' + (today.getMonth() + 1).toString().padStart(2, '0') + '/' + today.getFullYear();
+                await addDoc(collection(db, 'documents'), {
+                    title: s.title, description: s.description || '',
+                    category: finalTag, fileUrl: s.fileUrl,
+                    videoUrl: s.videoUrl || null, allowPreview: true,
+                    iconSVG: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline>`,
+                    views: 0, downloads: 0, likes: 0,
+                    date: dateStr, timestamp: serverTimestamp(),
+                    contributedBy: s.submitterUid
+                });
+                await deleteDoc(doc(db, 'submissions', id));
+                allSubmissions = allSubmissions.filter(x => x.id !== id);
+                renderSubmissions();
+                loadDocs();
+                alert('✅ Đã duyệt và thêm vào kho tài liệu!');
+            } catch (e) { alert('Lỗi: ' + e.message); }
+        };
+
+        window.rejectSubmission = async function (id) {
+            const s = allSubmissions.find(x => x.id === id);
+            if (!s || !confirm(`Từ chối đóng góp "${s.title}"? Thao tác này không thể hoàn tác.`)) return;
+            try {
+                await deleteDoc(doc(db, 'submissions', id));
+                allSubmissions = allSubmissions.filter(x => x.id !== id);
+                renderSubmissions();
+            } catch (e) { alert('Lỗi: ' + e.message); }
+        };
+
+        // ==== USER MANAGEMENT ====
+        let globalUsers = [];
+
+        async function loadUsers() {
+            try {
+                const snapshots = await getDocs(collection(db, "users"));
+                globalUsers = [];
+                snapshots.forEach(snapshot => {
+                    globalUsers.push({ id: snapshot.id, ...snapshot.data() });
+                });
+                renderUsers(globalUsers);
+            } catch (e) {
+                console.error("Lỗi tải người dùng:", e);
+                document.getElementById('userTableBody').innerHTML = '<tr><td colspan="4" style="color:var(--neon-red); text-align:center; padding:20px;">Không thể tải danh sách người dùng.</td></tr>';
+            }
+        }
+
+        function renderUsers(users) {
+            const tbody = document.getElementById('userTableBody');
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--text-secondary);">Không tìm thấy người dùng nào.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = users.map(user => {
+                const role = user.role || 'user';
+                const email = user.email || 'N/A';
+                
+                // Color mapping
+                const colorMap = {
+                    'admin': 'var(--neon-cyan)',
+                    'vip': '#ffcc00',
+                    'contributor': '#b026ff',
+                    'user': 'var(--text-secondary)'
+                };
+
+                return `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                        <td style="padding: 15px;">${email}</td>
+                        <td style="padding: 15px; font-size:12px; opacity:0.5;">${user.id}</td>
+                        <td style="padding: 15px;">
+                            <span style="color: ${colorMap[role]}; font-weight: bold; text-transform: uppercase; font-size: 12px; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px;">
+                                ${role}
+                            </span>
+                        </td>
+                        <td style="padding: 15px;">
+                            <select onchange="updateUserRole('${user.id}', this.value)" style="background: var(--glass-bg); color: white; border: 1px solid var(--glass-border); padding: 5px 10px; border-radius: 8px; outline: none;">
+                                <option value="user" ${role === 'user' ? 'selected' : ''}>User</option>
+                                <option value="vip" ${role === 'vip' ? 'selected' : ''}>VIP</option>
+                                <option value="contributor" ${role === 'contributor' ? 'selected' : ''}>Contributor</option>
+                                <option value="admin" ${role === 'admin' ? 'selected' : ''}>Admin</option>
+                            </select>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        window.filterUsers = function () {
+            const q = document.getElementById('userSearch').value.toLowerCase();
+            const filtered = globalUsers.filter(u => (u.email || '').toLowerCase().includes(q));
+            renderUsers(filtered);
+        };
+
+        window.updateUserRole = async function (uid, newRole) {
+            if (!confirm(`Xác nhận đổi hạng thành viên thành [${newRole.toUpperCase()}]?`)) {
+                loadUsers(); // Reset select
+                return;
+            }
+
+            try {
+                // Sử dụng setDoc với merge để tự động tạo profile nếu chưa tồn tại
+                await setDoc(doc(db, "users", uid), { 
+                    role: newRole,
+                    updatedBy: auth.currentUser?.email || 'admin',
+                    lastUpdate: serverTimestamp()
+                }, { merge: true });
+                
+                alert('✅ Đã cập nhật hạng thành viên thành công!');
+                loadUsers();
+            } catch (e) {
+                console.error("Lỗi:", e);
+                if (e.code === 'permission-denied') {
+                    alert('❌ Lỗi: Firebase Rules chưa cho phép Admin sửa User.\n\nVui lòng dán bản Rules mới tui vừa cung cấp vào Firebase Console là xong!');
+                } else {
+                    alert('❌ Lỗi cập nhật: ' + e.message);
+                }
+                loadUsers();
+            }
+        };
+
+    </script>
+</body>
+
+</html>
