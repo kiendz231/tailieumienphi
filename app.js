@@ -1,1 +1,751 @@
-const a0_0x151521=a0_0x38b1;(function(_0x89753a,_0xf1f9ea){const _0x4d2b67=a0_0x38b1,_0x5f5d80=_0x89753a();while(!![]){try{const _0x25f081=parseInt(_0x4d2b67(0x1d8))/0x1*(parseInt(_0x4d2b67(0x15a))/0x2)+-parseInt(_0x4d2b67(0x17c))/0x3*(parseInt(_0x4d2b67(0x196))/0x4)+parseInt(_0x4d2b67(0x156))/0x5+-parseInt(_0x4d2b67(0x132))/0x6*(-parseInt(_0x4d2b67(0x16b))/0x7)+-parseInt(_0x4d2b67(0x168))/0x8+parseInt(_0x4d2b67(0x1be))/0x9*(parseInt(_0x4d2b67(0x1f9))/0xa)+-parseInt(_0x4d2b67(0x16a))/0xb;if(_0x25f081===_0xf1f9ea)break;else _0x5f5d80['push'](_0x5f5d80['shift']());}catch(_0x1f91a7){_0x5f5d80['push'](_0x5f5d80['shift']());}}}(a0_0x2b6f,0xc0047));function a0_0x38b1(_0x50294b,_0x1ddf79){_0x50294b=_0x50294b-0x12c;const _0x2b6fd7=a0_0x2b6f();let _0x38b1c2=_0x2b6fd7[_0x50294b];return _0x38b1c2;}import{initializeApp}from'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js';import{getAnalytics}from'https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js';import{getFirestore,collection,getDocs,doc,getDoc,setDoc,updateDoc,arrayUnion,arrayRemove,increment,addDoc,serverTimestamp}from'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';import{getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,onAuthStateChanged,signOut}from'https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js';import{getStorage,ref,uploadBytes,getDownloadURL}from'https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js';const firebaseConfig={'apiKey':a0_0x151521(0x1b3),'authDomain':'bourbon-d0505.firebaseapp.com','projectId':a0_0x151521(0x19b),'storageBucket':'bourbon-d0505.firebasestorage.app','messagingSenderId':a0_0x151521(0x1d3),'appId':a0_0x151521(0x1f0),'measurementId':'G-TEV7YQWQBZ'},app=initializeApp(firebaseConfig),analytics=getAnalytics(app),db=getFirestore(app),auth=getAuth(app),storage=getStorage(app);let currentUserUid=null,currentUserLikedDocs=[],currentUserVault=[],currentUserRole=a0_0x151521(0x164),currentlyViewingDoc=null;window[a0_0x151521(0x1e1)]=function(){const _0x13f0aa=a0_0x151521;if(!currentUserUid)return alert(_0x13f0aa(0x155));document['getElementById'](_0x13f0aa(0x1ae))[_0x13f0aa(0x1f4)][_0x13f0aa(0x142)](_0x13f0aa(0x1eb)),document[_0x13f0aa(0x1d9)][_0x13f0aa(0x1df)][_0x13f0aa(0x208)]='hidden',document[_0x13f0aa(0x1a5)]('avatarErrorMsg')['innerText']='';},window['closeAvatarModal']=function(){const _0x471f63=a0_0x151521;document[_0x471f63(0x1a5)](_0x471f63(0x1ae))[_0x471f63(0x1f4)][_0x471f63(0x13a)](_0x471f63(0x1eb)),document[_0x471f63(0x1d9)][_0x471f63(0x1df)]['overflow']='';},window['selectUserAvatar']=function(_0x1113c1){const _0x516cb7=a0_0x151521;document[_0x516cb7(0x1a5)]('customUserAvatarUrl')[_0x516cb7(0x17d)]=_0x1113c1;const _0x59bd72=document['querySelectorAll'](_0x516cb7(0x221));_0x59bd72['forEach'](_0x138d5a=>_0x138d5a['style'][_0x516cb7(0x146)]=_0x516cb7(0x211)),event[_0x516cb7(0x19c)][_0x516cb7(0x1df)][_0x516cb7(0x146)]=_0x516cb7(0x214);},window[a0_0x151521(0x1d2)]=async function(_0x318d07){const _0x1ff5e9=a0_0x151521;if(!currentUserUid)return;const _0x25ce1c=document[_0x1ff5e9(0x1a5)](_0x1ff5e9(0x148))[_0x1ff5e9(0x17d)][_0x1ff5e9(0x139)]();if(!_0x25ce1c)return;const _0x1d7599=_0x318d07[_0x1ff5e9(0x19c)],_0x2aab9b=document[_0x1ff5e9(0x1a5)](_0x1ff5e9(0x1a0));_0x1d7599[_0x1ff5e9(0x1a7)]='Đang\x20lưu...';try{await setDoc(doc(db,_0x1ff5e9(0x1b8),currentUserUid),{'avatarUrl':_0x25ce1c},{'merge':!![]}),_0x2aab9b[_0x1ff5e9(0x1df)][_0x1ff5e9(0x18e)]=_0x1ff5e9(0x214),_0x2aab9b[_0x1ff5e9(0x1a7)]=_0x1ff5e9(0x131);const _0x5b19ad=document[_0x1ff5e9(0x1a5)](_0x1ff5e9(0x18a));_0x5b19ad[_0x1ff5e9(0x1df)][_0x1ff5e9(0x12f)]='url(\x27'+_0x25ce1c+'\x27)',_0x5b19ad[_0x1ff5e9(0x1df)][_0x1ff5e9(0x191)]=_0x1ff5e9(0x1ca),_0x5b19ad['style']['backgroundPosition']=_0x1ff5e9(0x16f);const _0x2b1ddf=document['getElementById'](_0x1ff5e9(0x13f));_0x2b1ddf&&(_0x5b19ad['innerHTML']='',_0x5b19ad['appendChild'](_0x2b1ddf)),setTimeout(()=>{const _0x162bf6=_0x1ff5e9;closeAvatarModal(),_0x2aab9b[_0x162bf6(0x1a7)]='';},0x5dc);}catch(_0xd1ce5a){_0x2aab9b[_0x1ff5e9(0x1df)][_0x1ff5e9(0x18e)]=_0x1ff5e9(0x18f),_0x2aab9b['innerText']=_0x1ff5e9(0x1f5)+_0xd1ce5a['message'];}finally{_0x1d7599[_0x1ff5e9(0x1a7)]=_0x1ff5e9(0x216);}};async function fetchUserLevelAvatar(_0x2d3873){const _0x1f4253=a0_0x151521;try{const _0x1e2906=await getDoc(doc(db,'users',_0x2d3873)),_0xf4d263=document[_0x1f4253(0x1a5)](_0x1f4253(0x18a));let _0x394aeb='';if(_0x1e2906['exists']()){const _0x1cfbfc=_0x1e2906[_0x1f4253(0x20a)]();if(_0x1cfbfc[_0x1f4253(0x13e)])_0x394aeb=_0x1cfbfc[_0x1f4253(0x13e)];currentUserLikedDocs=_0x1cfbfc[_0x1f4253(0x1ed)]||[],currentUserVault=_0x1cfbfc[_0x1f4253(0x1e6)]||[],currentUserRole=_0x1cfbfc[_0x1f4253(0x1d7)]||(_0x2d3873===_0x1f4253(0x212)?_0x1f4253(0x18b):_0x1f4253(0x164));}if(!_0x394aeb){const _0x1194b7=[_0x1f4253(0x135),_0x1f4253(0x12c),_0x1f4253(0x1a8),_0x1f4253(0x1d0),'https://i.postimg.cc/zfHPzdbJ/tai-xuong.jpg'];_0x394aeb=_0x1194b7[Math[_0x1f4253(0x143)](Math['random']()*_0x1194b7[_0x1f4253(0x1e8)])],setDoc(doc(db,_0x1f4253(0x1b8),_0x2d3873),{'avatarUrl':_0x394aeb},{'merge':!![]});}_0xf4d263[_0x1f4253(0x1df)][_0x1f4253(0x12f)]='url(\x27'+_0x394aeb+'\x27)',_0xf4d263['style'][_0x1f4253(0x191)]=_0x1f4253(0x1ca),_0xf4d263[_0x1f4253(0x1df)][_0x1f4253(0x1dc)]=_0x1f4253(0x16f),_0xf4d263[_0x1f4253(0x21b)]='';if(allDocs['length']>0x0){const _0x57bc69=document[_0x1f4253(0x202)](_0x1f4253(0x162));filterDocs(_0x57bc69?_0x57bc69[_0x1f4253(0x1a7)]:_0x1f4253(0x21d));}const _0x23ffa6=document[_0x1f4253(0x163)]('div');_0x23ffa6['id']=_0x1f4253(0x13f),_0x23ffa6[_0x1f4253(0x1bc)]=_0x1f4253(0x1a4),_0x23ffa6[_0x1f4253(0x21b)]=_0x1f4253(0x1fc),_0x23ffa6['onclick']=window[_0x1f4253(0x1e1)],_0xf4d263[_0x1f4253(0x1f6)](_0x23ffa6);}catch(_0x3b4071){console[_0x1f4253(0x1b4)](_0x3b4071);}}async function fetchAdminGlobalAvatar(){const _0x29ec26=a0_0x151521;try{const _0x13b821=await getDoc(doc(db,'settings',_0x29ec26(0x190))),_0x130d58=document[_0x29ec26(0x1a5)]('authorAvatar');if(_0x13b821[_0x29ec26(0x1fb)]()&&_0x13b821['data']()['avatarUrl'])_0x130d58['style']['backgroundImage']=_0x29ec26(0x1d4)+_0x13b821[_0x29ec26(0x20a)]()[_0x29ec26(0x13e)]+'\x27)';else{const _0x4c7f25=[_0x29ec26(0x135),_0x29ec26(0x12c),'https://i.postimg.cc/WzZktkmZ/tai-xuong-(2).jpg','https://i.postimg.cc/QCvF3xRK/tai-xuong-(1).jpg',_0x29ec26(0x1a6)];_0x130d58[_0x29ec26(0x1df)][_0x29ec26(0x12f)]=_0x29ec26(0x1d4)+_0x4c7f25[Math[_0x29ec26(0x143)](Math[_0x29ec26(0x1e3)]()*_0x4c7f25['length'])]+'\x27)';}_0x130d58['style'][_0x29ec26(0x191)]=_0x29ec26(0x1ca),_0x130d58[_0x29ec26(0x1df)][_0x29ec26(0x1dc)]=_0x29ec26(0x16f),_0x130d58['innerHTML']='';}catch(_0x54ea3a){}}const modal=document[a0_0x151521(0x1a5)](a0_0x151521(0x18c)),modalTitle=document[a0_0x151521(0x1a5)](a0_0x151521(0x181)),modalDesc=document['getElementById'](a0_0x151521(0x160));window['openModal']=async function(_0x119ada){const _0x3dff93=a0_0x151521,_0x5d5d94=allDocs[_0x3dff93(0x1ad)](_0x29e715=>_0x29e715['id']===_0x119ada);if(!_0x5d5d94)return;currentlyViewingDoc=_0x5d5d94,modalTitle['innerText']=_0x5d5d94[_0x3dff93(0x138)]||_0x3dff93(0x150),modalDesc[_0x3dff93(0x21b)]='<p>'+(_0x5d5d94[_0x3dff93(0x140)]||'')+_0x3dff93(0x184)+(_0x5d5d94[_0x3dff93(0x1b2)]||0x0)+'</b>\x20&nbsp;&nbsp;|&nbsp;&nbsp;\x20⬇\x20Lượt\x20tải:\x20<b\x20style=\x22color:#00ffaa\x22>'+(_0x5d5d94[_0x3dff93(0x145)]||0x0)+'</b></p>',modal[_0x3dff93(0x1f4)]['add']('active'),document[_0x3dff93(0x1d9)][_0x3dff93(0x1df)][_0x3dff93(0x208)]=_0x3dff93(0x1aa);const _0x1b681e=document[_0x3dff93(0x1a5)](_0x3dff93(0x1b5)),_0x1616c4=document['getElementById']('videoEmbedFrame');if(_0x5d5d94[_0x3dff93(0x16d)]){let _0x494ea0=_0x5d5d94[_0x3dff93(0x16d)];const _0x477f48=_0x5d5d94[_0x3dff93(0x16d)]['match'](/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);if(_0x477f48)_0x494ea0=_0x3dff93(0x14c)+_0x477f48[0x1]+_0x3dff93(0x1a1);else{const _0x5a7ab6=_0x5d5d94['videoUrl'][_0x3dff93(0x1a2)](/\/d\/([a-zA-Z0-9_-]+)/);if(_0x5a7ab6)_0x494ea0=_0x3dff93(0x1f1)+_0x5a7ab6[0x1]+_0x3dff93(0x18d);}_0x1616c4[_0x3dff93(0x207)]=_0x494ea0,_0x1b681e[_0x3dff93(0x1df)][_0x3dff93(0x1a3)]=_0x3dff93(0x1d1);}else _0x1616c4[_0x3dff93(0x207)]='',_0x1b681e[_0x3dff93(0x1df)][_0x3dff93(0x1a3)]=_0x3dff93(0x1ef);const _0xe8c666=document[_0x3dff93(0x1a5)](_0x3dff93(0x17f)),_0x24ff92=document['getElementById'](_0x3dff93(0x188)),_0x46daa9=document[_0x3dff93(0x1a5)](_0x3dff93(0x19f)),_0x131cc3=_0x5d5d94['allowPreview']!==![];if(!_0x131cc3)_0xe8c666[_0x3dff93(0x1df)][_0x3dff93(0x1a3)]='none',_0x24ff92['style']['display']=_0x3dff93(0x1d1),_0x24ff92[_0x3dff93(0x21b)]=_0x3dff93(0x21f),_0x46daa9['style'][_0x3dff93(0x1d5)]=_0x3dff93(0x1bf);else{_0x46daa9['style'][_0x3dff93(0x1d5)]=_0x3dff93(0x1c9),_0xe8c666[_0x3dff93(0x1df)][_0x3dff93(0x1a3)]=_0x3dff93(0x1ef),_0x24ff92['style']['display']=_0x3dff93(0x1d1),_0x24ff92[_0x3dff93(0x21b)]=_0x3dff93(0x1e0);if(_0x5d5d94['fileUrl']){let _0x10d681=_0x5d5d94['fileUrl'];const _0x28ed8b=_0x5d5d94[_0x3dff93(0x170)][_0x3dff93(0x1a2)](/\/d\/([a-zA-Z0-9_-]+)/);_0x28ed8b?_0x10d681=_0x3dff93(0x1f1)+_0x28ed8b[0x1]+_0x3dff93(0x18d):_0x10d681=_0x3dff93(0x185)+encodeURIComponent(_0x5d5d94[_0x3dff93(0x170)])+_0x3dff93(0x15d),_0xe8c666[_0x3dff93(0x207)]=_0x10d681;}else _0x24ff92[_0x3dff93(0x21b)]=_0x3dff93(0x169);}try{await updateDoc(doc(db,_0x3dff93(0x198),_0x119ada),{'views':increment(0x1)}),_0x5d5d94[_0x3dff93(0x1b2)]=(_0x5d5d94[_0x3dff93(0x1b2)]||0x0)+0x1;}catch(_0x5d5971){}},window[a0_0x151521(0x12e)]=async function(_0x7a1919){const _0x20a7a0=a0_0x151521;if(!currentUserUid)return alert('Vui\x20lòng\x20đăng\x20nhập\x20để\x20thả\x20tim\x20tài\x20liệu!'),window[_0x20a7a0(0x20c)]();try{const _0xa5df11=doc(db,'documents',_0x7a1919),_0x271d6d=doc(db,_0x20a7a0(0x1b8),currentUserUid);currentUserLikedDocs[_0x20a7a0(0x1ac)](_0x7a1919)?(await updateDoc(_0xa5df11,{'likes':increment(-0x1)}),await updateDoc(_0x271d6d,{'likedDocs':arrayRemove(_0x7a1919)}),currentUserLikedDocs=currentUserLikedDocs[_0x20a7a0(0x215)](_0x25b20e=>_0x25b20e!==_0x7a1919)):(await updateDoc(_0xa5df11,{'likes':increment(0x1)}),await setDoc(_0x271d6d,{'likedDocs':arrayUnion(_0x7a1919)},{'merge':!![]}),currentUserLikedDocs[_0x20a7a0(0x19a)](_0x7a1919));const _0x258250=allDocs[_0x20a7a0(0x1ad)](_0x5ed8c3=>_0x5ed8c3['id']===_0x7a1919);_0x258250&&(_0x258250[_0x20a7a0(0x219)]=(_0x258250[_0x20a7a0(0x219)]||0x0)+(currentUserLikedDocs[_0x20a7a0(0x1ac)](_0x7a1919)?0x1:-0x1)),renderCurrentGrid();}catch(_0x32a18d){console[_0x20a7a0(0x1b4)](_0x20a7a0(0x149),_0x32a18d);}},window['toggleVault']=async function(_0x1e9f58){const _0x148b2b=a0_0x151521;if(!currentUserUid)return alert(_0x148b2b(0x187)),window[_0x148b2b(0x20c)]();try{const _0x10be6=doc(db,_0x148b2b(0x1b8),currentUserUid),_0x46b473=currentUserVault[_0x148b2b(0x1ac)](_0x1e9f58);_0x46b473?(await updateDoc(_0x10be6,{'vault':arrayRemove(_0x1e9f58)}),currentUserVault=currentUserVault[_0x148b2b(0x215)](_0x66a450=>_0x66a450!==_0x1e9f58)):(await setDoc(_0x10be6,{'vault':arrayUnion(_0x1e9f58)},{'merge':!![]}),currentUserVault[_0x148b2b(0x19a)](_0x1e9f58));renderCurrentGrid();const _0x36084b=_0x46b473?_0x148b2b(0x1b9):'Đã\x20lưu\x20vào\x20Thư\x20viện\x20Cá\x20nhân!';alert(_0x36084b);}catch(_0x164dd5){console[_0x148b2b(0x1b4)](_0x148b2b(0x16e),_0x164dd5);}};function a0_0x2b6f(){const _0x849740=['customUserAvatarUrl','Error\x20toggling\x20like:','Mật\x20khẩu\x20quá\x20yếu\x20(tối\x20thiểu\x206\x20ký\x20tự).','Escape','https://www.youtube.com/embed/','keydown','Bạn\x20đã\x20thử\x20sai\x20quá\x20nhiều\x20lần.\x20Vui\x20lòng\x20thử\x20lại\x20sau.','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22meta-item\x22\x20title=\x22Lượt\x20tải\x20xuống\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2216\x22\x20height=\x2216\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22#00ffaa\x22\x20stroke-width=\x222\x22><path\x20d=\x22M21\x2015v4a2\x202\x200\x200\x201-2\x202H5a2\x202\x200\x200\x201-2-2v-4\x22></path><polyline\x20points=\x227\x2010\x2012\x2015\x2017\x2010\x22></polyline><line\x20x1=\x2212\x22\x20y1=\x2215\x22\x20x2=\x2212\x22\x20y2=\x223\x22></line></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','Tài\x20liệu','ctbSubmitBtn','code','Tài\x20liệu\x20không\x20tên','\x20<svg\x20width=\x2224\x22\x20height=\x2224\x22\x20style=\x22vertical-align:\x20middle;\x20margin-bottom:\x205px;\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22var(--text-secondary)\x22\x20stroke-width=\x222\x22><circle\x20cx=\x2212\x22\x20cy=\x228\x22\x20r=\x225\x22/><path\x20d=\x22M3\x2021v-2a7\x207\x200\x200\x201\x2014\x200v2\x22/></svg>,<br>Tôi\x20là\x20<span>Bourbon</span>','Vui\x20lòng\x20đăng\x20nhập\x20để\x20đổi\x20avatar!','2168460MatEvN','ctbTag','forEach','contains','10MaNzpj','<div\x20style=\x22grid-column:\x201\x20/\x20-1;\x20text-align:\x20center;\x20padding:\x2060px;\x20color:\x20var(--text-secondary);\x22><p>Thư\x20viện\x20của\x20bạn\x20đang\x20trống.<br>Hãy\x20nhấn\x20nút\x20📌\x20trên\x20tài\x20liệu\x20để\x20lưu\x20vào\x20đây!</p></div>','now','&embedded=true','authError','disabled','modalDesc','authPassword','#homeCategories\x20.cat-tag.active','createElement','user','inline-block','authorDesc','welcomeOverlay','2915432ebGWTq','<p\x20style=\x22color:var(--text-secondary)\x22>Tài\x20liệu\x20này\x20chưa\x20có\x20link\x20xem\x20trước.</p>','6284256aOrDiQ','141617qnwgUV','register','videoUrl','Error\x20toggling\x20vault:','center','fileUrl',';\x20display:flex;\x20align-items:center;\x20gap:5px;\x20font-weight:bold;\x20font-size:16px;\x20transition:0.3s;\x22\x20onclick=\x22toggleLike(\x27','#homeCategories\x20.cat-tag','message','authMode','uid','Gửi\x20Đóng\x20Góp\x20→','<span\x20title=\x22VIP\x20ONLY\x22\x20style=\x22color:#ffcc00;\x20margin-left:5px;\x22>⭐</span>','timestamp','authEmail','onclick','category','1600641eYJugo','value','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22display:flex;\x20gap:10px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20title=\x22Lưu\x20vào\x20Thư\x20viện\x20Cá\x20nhân\x22\x20style=\x22background:none;\x20border:none;\x20cursor:pointer;\x20color:\x20','filePreviewFrame','filterDocs','modalTitle','getItem','authSubmitBtn','</p><br><p\x20style=\x22font-size:13px;\x20color:var(--text-secondary)\x22>👁\x20Lượt\x20xem:\x20<b\x20style=\x22color:var(--neon-cyan)\x22>','https://docs.google.com/viewer?url=','contributor','Vui\x20lòng\x20đăng\x20nhập\x20để\x20lưu\x20vào\x20Thư\x20viện\x20Cá\x20nhân!','previewLoading','closeContributeModal','authorAvatar','admin','previewModal','/preview','color','#ff5e5e','profile','backgroundSize','createdAt','adminUploadBtn','welcomeLastSeen','welcomeBody','4tzPOsn','🔥\x20','documents','ctbStatusMsg','push','bourbon-d0505','target','var(--text-secondary)','isVipOnly','filePreviewArea','avatarErrorMsg','?rel=0','match','display','edit-avatar-overlay','getElementById','https://i.postimg.cc/zfHPzdbJ/tai-xuong.jpg','innerText','https://i.postimg.cc/WzZktkmZ/tai-xuong-(2).jpg','data-cat','hidden','Đang\x20gửi...','includes','find','avatarModal','.auth-tab','contributeNavBtn','#ff6b6b','views','AIzaSyBnP8V6xWabk0cfGhwY4AdPX829rPPRnf4','error','videoEmbedArea','defaultAuthorDesc','submitAuth','users','Đã\x20xóa\x20khỏi\x20Thư\x20viện!','toDateString','switchAuthTab','className','eyeIcon','531SUAgja','160px','addEventListener','Hôm\x20nay\x20có\x20<strong\x20style=\x22color:var(--neon-cyan)\x22>','reports','getAttribute','closeModal','Không\x20có\x20mô\x20tả.','Chào\x20bạn,<br>Tôi\x20là\x20<span>Bourbon\x20<svg\x20width=\x2224\x22\x20height=\x2224\x22\x20style=\x22vertical-align:\x20middle;\x20margin-bottom:\x205px;\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22var(--neon-cyan)\x22\x20stroke=\x22var(--neon-cyan)\x22\x20stroke-width=\x221\x22><path\x20d=\x22M12\x2022s8-4\x208-10V5l-8-3-8\x203v7c0\x206\x208\x2010\x208\x2010z\x22></path></svg></span>','password','vokien609@gmail.com','500px','cover','openContributeModal','login','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22doc-footer\x22\x20style=\x22margin-top:15px;\x20padding-top:15px;\x20border-top:1px\x20solid\x20rgba(255,255,255,0.05);\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22doc-meta\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22meta-item\x22>','<div\x20class=\x22cat-tag\x22\x20data-cat=\x22vip\x22\x20style=\x22color:\x20#ffcc00;\x20border-color:\x20#ffcc00;\x22\x20onclick=\x22filterDocs(\x27vip\x27,\x20this)\x22>🌟\x20VIP\x20Hub</div>','pending','https://i.postimg.cc/QCvF3xRK/tai-xuong-(1).jpg','block','saveUserAvatar','935278237286','url(\x27','minHeight','closeAuthModal','role','112743DHLZTU','body','open','Cám\x20ơn\x20bạn\x20đã\x20báo\x20cáo.\x20Quản\x20trị\x20viên\x20sẽ\x20sớm\x20kiểm\x20tra\x20lại\x20link!','backgroundPosition',';\x20transition:0.3s;\x22\x20onclick=\x22toggleVault(\x27','Đăng\x20nhập\x20/\x20Đăng\x20ký','style','<svg\x20width=\x2240\x22\x20height=\x2240\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22var(--neon-cyan)\x22\x20stroke-width=\x222\x22\x20style=\x22animation:spin\x201s\x20linear\x20infinite;margin-bottom:15px;\x22><line\x20x1=\x2212\x22\x20y1=\x222\x22\x20x2=\x2212\x22\x20y2=\x226\x22></line><line\x20x1=\x2212\x22\x20y1=\x2218\x22\x20x2=\x2212\x22\x20y2=\x2222\x22></line><line\x20x1=\x224.93\x22\x20y1=\x224.93\x22\x20x2=\x227.76\x22\x20y2=\x227.76\x22></line><line\x20x1=\x2216.24\x22\x20y1=\x2216.24\x22\x20x2=\x2219.07\x22\x20y2=\x2219.07\x22></line><line\x20x1=\x222\x22\x20y1=\x2212\x22\x20x2=\x226\x22\x20y2=\x2212\x22></line><line\x20x1=\x2218\x22\x20y1=\x2212\x22\x20x2=\x2222\x22\x20y2=\x2212\x22></line><line\x20x1=\x224.93\x22\x20y1=\x2219.07\x22\x20x2=\x227.76\x22\x20y2=\x2216.24\x22></line><line\x20x1=\x2216.24\x22\x20y1=\x224.93\x22\x20x2=\x2219.07\x22\x20y2=\x227.76\x22></line></svg><p>Đang\x20tải\x20xem\x20trước...</p>','openAvatarModal','inline-flex','random','\x20tài\x20liệu\x20mới</strong>\x20vừa\x20được\x20thêm\x20vào\x20kho.<br>Khám\x20phá\x20ngay\x20và\x20đừng\x20bỏ\x20lỡ\x20nhé!\x20💛','<path\x20d=\x22M14\x202H6a2\x202\x200\x200\x200-2\x202v16a2\x202\x200\x200\x200\x202\x202h12a2\x202\x200\x200\x200\x202-2V8z\x22></path><polyline\x20points=\x2214\x202\x2014\x208\x2020\x208\x22></polyline>','vault','<div\x20style=\x22grid-column:\x201\x20/\x20-1;\x20text-align:\x20center;\x20padding:\x2060px;\x20color:\x20var(--neon-red);\x22><p>Lỗi\x20kết\x20nối\x20cơ\x20sở\x20dữ\x20liệu.\x20Vui\x20lòng\x20kiểm\x20tra\x20lại\x20quyền\x20truy\x20cập\x20Firestore\x20Rules.</p></div>','length','❌\x20Lỗi:\x20','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22doc-header\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22doc-icon\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2232\x22\x20height=\x2232\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','active','toMillis','likedDocs','Đăng\x20xuất','none','1:935278237286:web:2b8183abb241ac932fffa7','https://drive.google.com/file/d/','navAuthBtn','vip','classList','Lỗi:\x20','appendChild','ctbTitle','<span\x20class=\x22badge-new\x22>🔥\x20Mới</span>','154990dnImqc','Lỗi\x20gửi\x20báo\x20cáo:\x20','exists','Đổi\x20Avatar<br>Cá\x20Nhân','setItem','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22doc-title\x22>','name','flex','tags','querySelector','ctbUrl','iconSVG','contributeModal','click','src','overflow','Tạo\x20Tài\x20Khoản','data','Có\x20lỗi\x20xảy\x20ra\x20khi\x20lấy\x20link\x20tải:\x20','openAuthModal','email','Tạo\x20tài\x20khoản','Đã\x20gửi!','authTitle','transparent','I3H5iU0XW5R5n4zY3L6z9L9z9L9z','toggle','var(--neon-cyan)','filter','Lưu\x20Avatar','closeWelcome','type','likes','ctbDesc','innerHTML','\x27)\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2220\x22\x20height=\x2220\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22','Tất\x20cả','\x27)\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Xem\x20chi\x20tiết\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22text-align:center;\x20padding:40px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2248\x22\x20height=\x2248\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22var(--text-secondary)\x22\x20stroke-width=\x221.5\x22\x20style=\x22margin-bottom:16px;\x22><rect\x20x=\x223\x22\x20y=\x2211\x22\x20width=\x2218\x22\x20height=\x2211\x22\x20rx=\x222\x22\x20ry=\x222\x22></rect><path\x20d=\x22M7\x2011V7a5\x205\x200\x200\x201\x2010\x200v4\x22></path></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20style=\x22color:var(--text-secondary);\x20font-size:15px;\x20font-weight:500;\x22>Tài\x20liệu\x20này\x20không\x20cho\x20phép\x20xem\x20trước</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20style=\x22color:var(--text-secondary);\x20font-size:13px;\x20margin-top:8px;\x20opacity:0.6;\x22>Tải\x20xuống\x20để\x20xem\x20nội\x20dung\x20đầy\x20đủ</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>','authModal','#memeAvatars\x20img','https://i.postimg.cc/qM0R2S4S/kamu-kan.jpg','Cannot\x20fetch\x20tags:','toggleLike','backgroundImage','Đăng\x20ký','Đã\x20cập\x20nhật\x20Avatar\x20cá\x20nhân!','102NnsFkZ','Vui\x20lòng\x20đăng\x20nhập\x20để\x20gửi\x20báo\x20cáo\x20link\x20hỏng!','\x20tài\x20liệu\x20mới\x20trong\x2024\x20giờ\x20qua!','https://i.postimg.cc/T1QXVkch/tai-xuong-(3).jpg','Đăng\x20nhập','togglePasswordVisibility','title','trim','remove','querySelectorAll','signOutAdmin','#ff4d4d','avatarUrl','editAvatarOverlay','description','submitContribution','add','floor','text','downloads','borderColor','docGrid'];a0_0x2b6f=function(){return _0x849740;};return a0_0x2b6f();}function renderCurrentGrid(){const _0x1271be=a0_0x151521,_0x3f406d=document[_0x1271be(0x202)]('#homeCategories\x20.cat-tag.active');filterDocs(_0x3f406d?_0x3f406d[_0x1271be(0x1c3)](_0x1271be(0x1a9))||_0x3f406d[_0x1271be(0x1a7)]:_0x1271be(0x21d));}window['downloadDoc']=async function(){const _0x552814=a0_0x151521;if(!currentlyViewingDoc)return;try{await updateDoc(doc(db,_0x552814(0x198),currentlyViewingDoc['id']),{'downloads':increment(0x1)}),currentlyViewingDoc[_0x552814(0x145)]=(currentlyViewingDoc[_0x552814(0x145)]||0x0)+0x1,window[_0x552814(0x1da)](currentlyViewingDoc[_0x552814(0x170)],'_blank'),closeModal();}catch(_0x2e5c65){alert(_0x552814(0x20b)+_0x2e5c65[_0x552814(0x173)]);}},window['reportDoc']=async function(){const _0x2d6c29=a0_0x151521;if(!currentlyViewingDoc)return;if(!currentUserUid)return alert(_0x2d6c29(0x133)),window['openAuthModal']();try{await addDoc(collection(db,_0x2d6c29(0x1c2)),{'docId':currentlyViewingDoc['id'],'docTitle':currentlyViewingDoc[_0x2d6c29(0x138)],'reporterUid':currentUserUid,'status':_0x2d6c29(0x1cf),'timestamp':serverTimestamp()}),alert(_0x2d6c29(0x1db)),closeModal();}catch(_0x53d9a2){alert(_0x2d6c29(0x1fa)+_0x53d9a2['message']);}},window[a0_0x151521(0x1c4)]=function(){const _0x32f79c=a0_0x151521;modal[_0x32f79c(0x1f4)][_0x32f79c(0x13a)](_0x32f79c(0x1eb)),document[_0x32f79c(0x1d9)]['style'][_0x32f79c(0x208)]='';};const contributeModal=document[a0_0x151521(0x1a5)](a0_0x151521(0x205));window[a0_0x151521(0x1cb)]=async function(){const _0x5b8736=a0_0x151521;if(!currentUserUid)return window[_0x5b8736(0x20c)]();contributeModal[_0x5b8736(0x1f4)][_0x5b8736(0x142)](_0x5b8736(0x1eb)),document[_0x5b8736(0x1d9)][_0x5b8736(0x1df)]['overflow']=_0x5b8736(0x1aa),document[_0x5b8736(0x1a5)](_0x5b8736(0x199))['style']['display']=_0x5b8736(0x1ef),document[_0x5b8736(0x1a5)](_0x5b8736(0x151))[_0x5b8736(0x15f)]=![],document[_0x5b8736(0x1a5)](_0x5b8736(0x151))[_0x5b8736(0x1a7)]='Gửi\x20Đóng\x20Góp\x20→';const _0x34aee2=document[_0x5b8736(0x1a5)]('ctbTagList');_0x34aee2['innerHTML']='';try{const _0xc0f786=await getDocs(collection(db,_0x5b8736(0x201)));_0xc0f786[_0x5b8736(0x158)](_0x1e3279=>{const _0x1e1200=_0x5b8736;if(_0x1e3279['data']()[_0x1e1200(0x1ff)])_0x34aee2[_0x1e1200(0x21b)]+='<option\x20value=\x22'+_0x1e3279['data']()[_0x1e1200(0x1ff)]+'\x22>';});}catch(_0x4daef0){}},window['closeContributeModal']=function(){const _0x4f5c9c=a0_0x151521;contributeModal['classList'][_0x4f5c9c(0x13a)](_0x4f5c9c(0x1eb)),document[_0x4f5c9c(0x1d9)]['style']['overflow']='',document[_0x4f5c9c(0x1a5)](_0x4f5c9c(0x1f7))['value']='',document[_0x4f5c9c(0x1a5)](_0x4f5c9c(0x21a))[_0x4f5c9c(0x17d)]='',document[_0x4f5c9c(0x1a5)](_0x4f5c9c(0x157))['value']='',document[_0x4f5c9c(0x1a5)](_0x4f5c9c(0x203))[_0x4f5c9c(0x17d)]='',document[_0x4f5c9c(0x1a5)]('ctbVideo')[_0x4f5c9c(0x17d)]='';},contributeModal[a0_0x151521(0x1c0)](a0_0x151521(0x206),_0x2bd95f=>{const _0x4cfdb5=a0_0x151521;if(_0x2bd95f[_0x4cfdb5(0x19c)]===contributeModal)window[_0x4cfdb5(0x189)]();}),window[a0_0x151521(0x141)]=async function(){const _0x38f9a4=a0_0x151521,_0x50e599=document['getElementById'](_0x38f9a4(0x1f7))[_0x38f9a4(0x17d)][_0x38f9a4(0x139)](),_0x2448fb=document[_0x38f9a4(0x1a5)](_0x38f9a4(0x21a))[_0x38f9a4(0x17d)][_0x38f9a4(0x139)](),_0x4a228f=document[_0x38f9a4(0x1a5)](_0x38f9a4(0x157))[_0x38f9a4(0x17d)],_0x280318=document['getElementById'](_0x38f9a4(0x203))[_0x38f9a4(0x17d)][_0x38f9a4(0x139)](),_0x4b6b11=document[_0x38f9a4(0x1a5)]('ctbVideo')[_0x38f9a4(0x17d)][_0x38f9a4(0x139)](),_0x56fa96=document[_0x38f9a4(0x1a5)](_0x38f9a4(0x199)),_0x140512=document[_0x38f9a4(0x1a5)](_0x38f9a4(0x151));if(!_0x50e599||!_0x4a228f||!_0x280318){_0x56fa96[_0x38f9a4(0x1df)][_0x38f9a4(0x1a3)]='block',_0x56fa96['style'][_0x38f9a4(0x18e)]='#ff6b6b',_0x56fa96[_0x38f9a4(0x1a7)]='⚠️\x20Vui\x20lòng\x20điền\x20đầy\x20đủ\x20Tiêu\x20đề,\x20Phân\x20loại\x20và\x20Link\x20tài\x20liệu.';return;}_0x140512[_0x38f9a4(0x15f)]=!![],_0x140512[_0x38f9a4(0x1a7)]=_0x38f9a4(0x1ab),_0x56fa96[_0x38f9a4(0x1df)][_0x38f9a4(0x1a3)]=_0x38f9a4(0x1ef);try{await addDoc(collection(db,'submissions'),{'title':_0x50e599,'description':_0x2448fb,'category':_0x4a228f,'fileUrl':_0x280318,'videoUrl':_0x4b6b11||null,'submitterUid':currentUserUid,'status':'pending','timestamp':serverTimestamp()}),_0x56fa96[_0x38f9a4(0x1df)]['display']=_0x38f9a4(0x1d1),_0x56fa96[_0x38f9a4(0x1df)][_0x38f9a4(0x18e)]=_0x38f9a4(0x214),_0x56fa96[_0x38f9a4(0x1a7)]='✅\x20Đã\x20gửi\x20thành\x20công!\x20Cảm\x20ơn\x20bạn\x20đã\x20đóng\x20góp\x20💛',_0x140512['innerText']=_0x38f9a4(0x20f),setTimeout(()=>window[_0x38f9a4(0x189)](),0x9c4);}catch(_0x2ad790){_0x56fa96[_0x38f9a4(0x1df)][_0x38f9a4(0x1a3)]='block',_0x56fa96[_0x38f9a4(0x1df)]['color']=_0x38f9a4(0x1b1),_0x56fa96[_0x38f9a4(0x1a7)]=_0x38f9a4(0x1e9)+_0x2ad790[_0x38f9a4(0x173)],_0x140512[_0x38f9a4(0x15f)]=![],_0x140512[_0x38f9a4(0x1a7)]=_0x38f9a4(0x176);}};const authModal=document[a0_0x151521(0x1a5)](a0_0x151521(0x220));window[a0_0x151521(0x174)]=a0_0x151521(0x1cc),window[a0_0x151521(0x20c)]=function(){const _0x5ae6ce=a0_0x151521;authModal[_0x5ae6ce(0x1f4)][_0x5ae6ce(0x142)](_0x5ae6ce(0x1eb)),document[_0x5ae6ce(0x1d9)][_0x5ae6ce(0x1df)][_0x5ae6ce(0x208)]=_0x5ae6ce(0x1aa),document['getElementById'](_0x5ae6ce(0x15e))[_0x5ae6ce(0x1df)][_0x5ae6ce(0x1a3)]='none';},window[a0_0x151521(0x1d6)]=function(){const _0x2c7d2e=a0_0x151521;authModal[_0x2c7d2e(0x1f4)][_0x2c7d2e(0x13a)](_0x2c7d2e(0x1eb)),document[_0x2c7d2e(0x1d9)]['style']['overflow']='';},window[a0_0x151521(0x137)]=function(){const _0x4fa9e9=a0_0x151521,_0x3c5af3=document['getElementById'](_0x4fa9e9(0x161)),_0x31b257=document[_0x4fa9e9(0x1a5)](_0x4fa9e9(0x1bd)),_0x3a7671=document[_0x4fa9e9(0x1a5)]('eyeOffIcon');_0x3c5af3['type']===_0x4fa9e9(0x1c7)?(_0x3c5af3[_0x4fa9e9(0x218)]=_0x4fa9e9(0x144),_0x31b257['style']['display']=_0x4fa9e9(0x1ef),_0x3a7671[_0x4fa9e9(0x1df)][_0x4fa9e9(0x1a3)]='block'):(_0x3c5af3['type']=_0x4fa9e9(0x1c7),_0x31b257['style']['display']='block',_0x3a7671[_0x4fa9e9(0x1df)][_0x4fa9e9(0x1a3)]=_0x4fa9e9(0x1ef));},window[a0_0x151521(0x1bb)]=function(_0x560284){const _0x2d3a2f=a0_0x151521;window[_0x2d3a2f(0x174)]=_0x560284;const _0x5e72f4=document[_0x2d3a2f(0x13b)](_0x2d3a2f(0x1af));_0x5e72f4[0x0]['classList'][_0x2d3a2f(0x213)](_0x2d3a2f(0x1eb),_0x560284===_0x2d3a2f(0x1cc)),_0x5e72f4[0x1][_0x2d3a2f(0x1f4)][_0x2d3a2f(0x213)]('active',_0x560284===_0x2d3a2f(0x16c)),document[_0x2d3a2f(0x1a5)](_0x2d3a2f(0x210))[_0x2d3a2f(0x1a7)]=_0x560284===_0x2d3a2f(0x1cc)?'Đăng\x20Nhập':_0x2d3a2f(0x209),document['getElementById'](_0x2d3a2f(0x183))['innerText']=_0x560284==='login'?_0x2d3a2f(0x136):_0x2d3a2f(0x130),document['getElementById'](_0x2d3a2f(0x15e))[_0x2d3a2f(0x1df)][_0x2d3a2f(0x1a3)]=_0x2d3a2f(0x1ef);},window[a0_0x151521(0x1b7)]=async function(){const _0x23f82a=a0_0x151521,_0x868c84=document[_0x23f82a(0x1a5)](_0x23f82a(0x179))['value'],_0xdd1541=document[_0x23f82a(0x1a5)](_0x23f82a(0x161))[_0x23f82a(0x17d)],_0xe1203a=document[_0x23f82a(0x1a5)](_0x23f82a(0x15e)),_0xb89dad=document[_0x23f82a(0x1a5)](_0x23f82a(0x183));_0xb89dad[_0x23f82a(0x21b)]='<svg\x20width=\x2220\x22\x20height=\x2220\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20style=\x22animation:\x20spin\x201s\x20linear\x20infinite;\x22><line\x20x1=\x2212\x22\x20y1=\x222\x22\x20x2=\x2212\x22\x20y2=\x226\x22></line><line\x20x1=\x2212\x22\x20y1=\x2218\x22\x20x2=\x2212\x22\x20y2=\x2222\x22></line><line\x20x1=\x224.93\x22\x20y1=\x224.93\x22\x20x2=\x227.76\x22\x20y2=\x227.76\x22></line><line\x20x1=\x2216.24\x22\x20y1=\x2216.24\x22\x20x2=\x2219.07\x22\x20y2=\x2219.07\x22></line><line\x20x1=\x222\x22\x20y1=\x2212\x22\x20x2=\x226\x22\x20y2=\x2212\x22></line><line\x20x1=\x2218\x22\x20y1=\x2212\x22\x20x2=\x2222\x22\x20y2=\x2212\x22></line><line\x20x1=\x224.93\x22\x20y1=\x2219.07\x22\x20x2=\x227.76\x22\x20y2=\x2216.24\x22></line><line\x20x1=\x2216.24\x22\x20y1=\x224.93\x22\x20x2=\x2219.07\x22\x20y2=\x227.76\x22></line></svg>\x20Đang\x20xử\x20lý...',_0xe1203a[_0x23f82a(0x1df)][_0x23f82a(0x1a3)]='none';try{window['authMode']===_0x23f82a(0x1cc)?await signInWithEmailAndPassword(auth,_0x868c84,_0xdd1541):await createUserWithEmailAndPassword(auth,_0x868c84,_0xdd1541),window[_0x23f82a(0x1d6)]();}catch(_0x1d07fb){_0xe1203a[_0x23f82a(0x1df)][_0x23f82a(0x1a3)]=_0x23f82a(0x1d1);let _0x2f99aa={'auth/email-already-in-use':'Email\x20này\x20đã\x20được\x20sử\x20dụng.','auth/weak-password':_0x23f82a(0x14a),'auth/invalid-credential':'Email\x20hoặc\x20mật\x20khẩu\x20không\x20đúng.','auth/too-many-requests':_0x23f82a(0x14e)};_0xe1203a[_0x23f82a(0x1a7)]=_0x2f99aa[_0x1d07fb[_0x23f82a(0x152)]]||'Lỗi\x20giao\x20tiếp\x20máy\x20chủ:\x20'+_0x1d07fb[_0x23f82a(0x152)];}finally{_0xb89dad['innerText']=window[_0x23f82a(0x174)]===_0x23f82a(0x1cc)?_0x23f82a(0x136):_0x23f82a(0x20e);}},window['signOutAdmin']=async function(){await signOut(auth);},window[a0_0x151521(0x1c0)](a0_0x151521(0x206),_0x190dd4=>{const _0x19b00a=a0_0x151521;if(_0x190dd4['target']===modal)window[_0x19b00a(0x1c4)]();if(_0x190dd4['target']===authModal)window[_0x19b00a(0x1d6)]();}),document[a0_0x151521(0x1c0)](a0_0x151521(0x14d),_0x5368ad=>{const _0xba0b53=a0_0x151521;if(_0x5368ad['key']===_0xba0b53(0x14b)){if(modal[_0xba0b53(0x1f4)]['contains'](_0xba0b53(0x1eb)))window[_0xba0b53(0x1c4)]();if(authModal[_0xba0b53(0x1f4)][_0xba0b53(0x159)](_0xba0b53(0x1eb)))window[_0xba0b53(0x1d6)]();}}),window[a0_0x151521(0x1b6)]=document[a0_0x151521(0x1a5)](a0_0x151521(0x166))['innerHTML'],onAuthStateChanged(auth,_0x1688a3=>{const _0x4d4350=a0_0x151521,_0x5bf8e4=document['getElementById'](_0x4d4350(0x1f2)),_0x172226=document[_0x4d4350(0x1a5)](_0x4d4350(0x193)),_0x5d68a7=document[_0x4d4350(0x202)]('.author-info\x20h1'),_0x254908=document['getElementById'](_0x4d4350(0x166));if(_0x1688a3){currentUserUid=_0x1688a3['uid'];const _0x85945e=_0x1688a3['email']===_0x4d4350(0x1c8);_0x5bf8e4[_0x4d4350(0x1a7)]=_0x85945e?'Đăng\x20xuất\x20Admin':_0x4d4350(0x1ee),_0x5bf8e4[_0x4d4350(0x17a)]=window[_0x4d4350(0x13c)],_0x5bf8e4[_0x4d4350(0x1df)][_0x4d4350(0x18e)]=_0x4d4350(0x214),_0x5bf8e4['style'][_0x4d4350(0x146)]=_0x4d4350(0x214),_0x254908['innerHTML']=window[_0x4d4350(0x1b6)];const _0xd38f19=_0x1688a3[_0x4d4350(0x20d)]['split']('@')[0x0];_0x85945e?(currentUserRole='admin',_0x172226[_0x4d4350(0x1df)]['display']=_0x4d4350(0x200),_0x5d68a7[_0x4d4350(0x21b)]=_0x4d4350(0x1c6),document[_0x4d4350(0x1a5)](_0x4d4350(0x1b0))[_0x4d4350(0x1df)][_0x4d4350(0x1a3)]=_0x4d4350(0x1ef)):(_0x172226[_0x4d4350(0x1df)][_0x4d4350(0x1a3)]='none',_0x5d68a7[_0x4d4350(0x21b)]='Chào\x20'+_0xd38f19+_0x4d4350(0x154),document[_0x4d4350(0x1a5)]('contributeNavBtn')[_0x4d4350(0x1df)][_0x4d4350(0x1a3)]=_0x4d4350(0x1e2)),fetchUserLevelAvatar(_0x1688a3[_0x4d4350(0x175)]),fetchTags();}else currentUserUid=null,currentUserLikedDocs=[],currentUserVault=[],currentUserRole=_0x4d4350(0x164),_0x5bf8e4[_0x4d4350(0x1a7)]=_0x4d4350(0x1de),_0x5bf8e4[_0x4d4350(0x17a)]=window[_0x4d4350(0x20c)],_0x5bf8e4[_0x4d4350(0x1df)][_0x4d4350(0x18e)]='',_0x5bf8e4['style'][_0x4d4350(0x146)]='',_0x172226[_0x4d4350(0x1df)][_0x4d4350(0x1a3)]=_0x4d4350(0x1ef),document['getElementById'](_0x4d4350(0x1b0))[_0x4d4350(0x1df)][_0x4d4350(0x1a3)]='none',_0x5d68a7[_0x4d4350(0x21b)]='Chào\x20bạn,<br>Tôi\x20là\x20<span>Bourbon</span>',_0x254908[_0x4d4350(0x21b)]=window[_0x4d4350(0x1b6)],fetchAdminGlobalAvatar(),fetchTags();});let allDocs=[];async function fetchTags(){const _0x587148=a0_0x151521;try{const _0x2b8ea8=await getDocs(collection(db,_0x587148(0x201))),_0x3a1371=document[_0x587148(0x1a5)]('homeCategories');let _0xe9a21c='<div\x20class=\x22cat-tag\x20active\x22\x20data-cat=\x22Tất\x20cả\x22\x20onclick=\x22filterDocs(\x27Tất\x20cả\x27,\x20this)\x22>Tất\x20cả</div>';currentUserUid&&(_0xe9a21c+='<div\x20class=\x22cat-tag\x22\x20data-cat=\x22vault\x22\x20style=\x22color:\x20var(--neon-cyan);\x20border-color:\x20var(--neon-cyan);\x22\x20onclick=\x22filterDocs(\x27vault\x27,\x20this)\x22>📂\x20Thư\x20viện\x20của\x20tôi</div>',(currentUserRole===_0x587148(0x1f3)||currentUserRole==='admin'||currentUserRole===_0x587148(0x186))&&(_0xe9a21c+=_0x587148(0x1ce))),_0x3a1371[_0x587148(0x21b)]=_0xe9a21c;}catch(_0x47bc67){console['error'](_0x587148(0x12d),_0x47bc67);}}window[a0_0x151521(0x180)]=function(_0x5d28f0,_0x17d4d9){const _0x39e329=a0_0x151521,_0x5df937=document[_0x39e329(0x13b)](_0x39e329(0x172));_0x5df937[_0x39e329(0x158)](_0x31ae22=>_0x31ae22[_0x39e329(0x1f4)][_0x39e329(0x13a)](_0x39e329(0x1eb)));if(_0x17d4d9)_0x17d4d9[_0x39e329(0x1f4)][_0x39e329(0x142)](_0x39e329(0x1eb));const _0x9e9e89=document[_0x39e329(0x1a5)]('docGrid');let _0x33cdd0=allDocs;if(_0x5d28f0===_0x39e329(0x21d)){const _0x506ae6=[_0x39e329(0x18b),_0x39e329(0x1f3),'contributor']['includes'](currentUserRole);_0x33cdd0=allDocs[_0x39e329(0x215)](_0x37f131=>!_0x37f131[_0x39e329(0x19e)]||_0x506ae6);}else{if(_0x5d28f0===_0x39e329(0x1e6)){_0x33cdd0=allDocs[_0x39e329(0x215)](_0x3a151e=>currentUserVault[_0x39e329(0x1ac)](_0x3a151e['id']));if(_0x33cdd0[_0x39e329(0x1e8)]===0x0)return _0x9e9e89['innerHTML']=_0x39e329(0x15b);}else{if(_0x5d28f0===_0x39e329(0x1f3)){_0x33cdd0=allDocs[_0x39e329(0x215)](_0x4cf00c=>_0x4cf00c['isVipOnly']);if(_0x33cdd0[_0x39e329(0x1e8)]===0x0)return _0x9e9e89['innerHTML']='<div\x20style=\x22grid-column:\x201\x20/\x20-1;\x20text-align:\x20center;\x20padding:\x2060px;\x20color:\x20var(--text-secondary);\x22><p>Khu\x20vực\x20VIP\x20Hub\x20đang\x20được\x20cập\x20nhật\x20các\x20tài\x20liệu\x20mới...</p></div>';}else _0x33cdd0=allDocs['filter'](_0xfa0380=>_0xfa0380[_0x39e329(0x17b)]===_0x5d28f0);}}_0x9e9e89[_0x39e329(0x21b)]=renderDocs(_0x33cdd0);};function renderDocs(_0x2887d9){const _0x39f6a1=a0_0x151521;let _0x2857ee='';const _0xf36b91=Date[_0x39f6a1(0x15c)](),_0x21ec47=0x7*0x18*0x3c*0x3c*0x3e8;return _0x2887d9[_0x39f6a1(0x158)](_0x35d8d4=>{const _0x21e757=_0x39f6a1,_0x2dc556=_0x35d8d4[_0x21e757(0x138)]||_0x21e757(0x153),_0x1d4d78=_0x35d8d4['description']||_0x21e757(0x1c5),_0x4f2fd1=_0x35d8d4['date']||_0x35d8d4[_0x21e757(0x192)]||'Vừa\x20xong',_0x4ea0a1=_0x35d8d4[_0x21e757(0x204)]||_0x21e757(0x1e5);let _0x5883b9=![];_0x35d8d4['timestamp']&&_0x35d8d4[_0x21e757(0x178)][_0x21e757(0x1ec)]&&(_0x5883b9=_0xf36b91-_0x35d8d4[_0x21e757(0x178)][_0x21e757(0x1ec)]()<_0x21ec47),_0x2857ee+='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22doc-card\x20liquid-glass\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20'+(_0x5883b9?_0x21e757(0x1f8):'')+_0x21e757(0x1ea)+_0x4ea0a1+_0x21e757(0x1fe)+_0x2dc556+'\x20'+(_0x35d8d4['isVipOnly']?_0x21e757(0x177):'')+'</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22doc-desc\x22>'+_0x1d4d78+'</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22display:flex;\x20justify-content:space-between;\x20align-items:center;\x20margin-top:20px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22doc-meta\x22\x20style=\x22gap:\x2015px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22meta-item\x22\x20title=\x22Lượt\x20xem\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2216\x22\x20height=\x2216\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22var(--neon-cyan)\x22\x20stroke-width=\x222\x22><path\x20d=\x22M1\x2012s4-8\x2011-8\x2011\x208\x2011\x208-4\x208-11\x208-11-8-11-8z\x22></path><circle\x20cx=\x2212\x22\x20cy=\x2212\x22\x20r=\x223\x22></circle></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20'+(_0x35d8d4['views']||0x0)+_0x21e757(0x14f)+(_0x35d8d4[_0x21e757(0x145)]||0x0)+_0x21e757(0x17e)+(currentUserVault[_0x21e757(0x1ac)](_0x35d8d4['id'])?_0x21e757(0x214):_0x21e757(0x19d))+_0x21e757(0x1dd)+_0x35d8d4['id']+_0x21e757(0x21c)+(currentUserVault[_0x21e757(0x1ac)](_0x35d8d4['id'])?'var(--neon-cyan)':'none')+'\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22><path\x20d=\x22M19\x2021l-7-5-7\x205V5a2\x202\x200\x200\x201\x202-2h10a2\x202\x200\x200\x201\x202\x202z\x22></path></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20title=\x22Yêu\x20thích\x22\x20style=\x22background:none;\x20border:none;\x20cursor:pointer;\x20color:\x20'+(currentUserLikedDocs[_0x21e757(0x1ac)](_0x35d8d4['id'])?_0x21e757(0x13d):_0x21e757(0x19d))+_0x21e757(0x171)+_0x35d8d4['id']+'\x27)\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2220\x22\x20height=\x2220\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22'+(currentUserLikedDocs[_0x21e757(0x1ac)](_0x35d8d4['id'])?'#ff4d4d':_0x21e757(0x1ef))+'\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22><path\x20d=\x22M20.84\x204.61a5.5\x205.5\x200\x200\x200-7.78\x200L12\x205.67l-1.06-1.06a5.5\x205.5\x200\x200\x200-7.78\x207.78l1.06\x201.06L12\x2021.23l7.78-7.78\x201.06-1.06a5.5\x205.5\x200\x200\x200\x200-7.78z\x22></path></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20'+(_0x35d8d4['likes']||0x0)+_0x21e757(0x1cd)+_0x4f2fd1+'</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22btn-view\x22\x20onclick=\x22openModal(\x27'+_0x35d8d4['id']+_0x21e757(0x21e);}),_0x2857ee;}async function fetchDocuments(){const _0x363c2b=a0_0x151521,_0x276017=document['getElementById'](_0x363c2b(0x147));try{const _0xe3463=await getDocs(collection(db,_0x363c2b(0x198)));_0xe3463['empty']?_0x276017[_0x363c2b(0x21b)]='<div\x20style=\x22grid-column:\x201\x20/\x20-1;\x20text-align:\x20center;\x20padding:\x2060px;\x20color:\x20var(--text-secondary);\x22><p>Chưa\x20có\x20tài\x20liệu\x20nào\x20được\x20chia\x20sẻ\x20trên\x20hệ\x20thống.</p></div>':(allDocs=[],_0xe3463['forEach'](_0x1cb5cf=>allDocs[_0x363c2b(0x19a)]({'id':_0x1cb5cf['id'],..._0x1cb5cf[_0x363c2b(0x20a)]()})),_0x276017[_0x363c2b(0x21b)]=renderDocs(allDocs),showWelcomePopup(allDocs));}catch(_0x86f27c){console[_0x363c2b(0x1b4)]('Firebase\x20connection\x20error.',_0x86f27c),_0x276017[_0x363c2b(0x21b)]=_0x363c2b(0x1e7);}}function showWelcomePopup(_0x4911e4){const _0x1fc887=a0_0x151521,_0x54d32a=new Date()['toDateString'](),_0x1255d0=localStorage[_0x1fc887(0x182)](_0x1fc887(0x194));if(_0x1255d0===_0x54d32a)return;const _0x18c7a3=Date[_0x1fc887(0x15c)]()-0x18*0x3c*0x3c*0x3e8,_0x5bda7e=_0x4911e4[_0x1fc887(0x215)](_0x1a1591=>_0x1a1591['timestamp']&&_0x1a1591[_0x1fc887(0x178)][_0x1fc887(0x1ec)]&&_0x1a1591[_0x1fc887(0x178)][_0x1fc887(0x1ec)]()>_0x18c7a3)['length'],_0x32485d=document['getElementById']('welcomeNewBadge'),_0x224d7b=document['getElementById'](_0x1fc887(0x195));_0x5bda7e>0x0?(_0x32485d[_0x1fc887(0x1df)][_0x1fc887(0x1a3)]=_0x1fc887(0x165),_0x32485d[_0x1fc887(0x21b)]=_0x1fc887(0x197)+_0x5bda7e+_0x1fc887(0x134),_0x224d7b[_0x1fc887(0x21b)]=_0x1fc887(0x1c1)+_0x5bda7e+_0x1fc887(0x1e4)):_0x224d7b[_0x1fc887(0x21b)]='Kho\x20tài\x20nguyên\x20của\x20Bourbon\x20luôn\x20miễn\x20phí\x20và\x20được\x20cập\x20nhật\x20thường\x20xuyên.<br>Nếu\x20thấy\x20hữu\x20ích,\x20hãy\x20cho\x20mình\x20biết\x20nhé!\x20💛',setTimeout(()=>{const _0x40c2cc=_0x1fc887;document[_0x40c2cc(0x1a5)](_0x40c2cc(0x167))[_0x40c2cc(0x1f4)][_0x40c2cc(0x142)](_0x40c2cc(0x1eb));},0x320);}window[a0_0x151521(0x217)]=function(){const _0x5acc35=a0_0x151521,_0x2f039a=document['getElementById']('welcomeOverlay');_0x2f039a[_0x5acc35(0x1f4)][_0x5acc35(0x13a)](_0x5acc35(0x1eb)),localStorage[_0x5acc35(0x1fd)](_0x5acc35(0x194),new Date()[_0x5acc35(0x1ba)]());},document['getElementById'](a0_0x151521(0x167))['addEventListener'](a0_0x151521(0x206),function(_0x3f3b34){const _0x463c66=a0_0x151521;if(_0x3f3b34[_0x463c66(0x19c)]===this)window[_0x463c66(0x217)]();}),fetchTags(),fetchDocuments();
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
+import { getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove, increment, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+
+// Your Firebase config
+const firebaseConfig = {
+    apiKey: "AIzaSyBnP8V6xWabk0cfGhwY4AdPX829rPPRnf4",
+    authDomain: "bourbon-d0505.firebaseapp.com",
+    projectId: "bourbon-d0505",
+    storageBucket: "bourbon-d0505.firebasestorage.app",
+    messagingSenderId: "935278237286",
+    appId: "1:935278237286:web:2b8183abb241ac932fffa7",
+    measurementId: "G-TEV7YQWQBZ"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const storage = getStorage(app);
+
+let currentUserUid = null;
+let currentUserLikedDocs = [];
+let currentUserVault = []; // Store IDs of docs in personal vault
+let currentUserRole = 'user'; // user, vip, contributor, admin
+let currentlyViewingDoc = null;
+
+// Avatar Management for Logged in Users
+window.openAvatarModal = function () {
+    if (!currentUserUid) return alert("Vui lòng đăng nhập để đổi avatar!");
+    document.getElementById('avatarModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('avatarErrorMsg').innerText = '';
+}
+window.closeAvatarModal = function () {
+    document.getElementById('avatarModal').classList.remove('active');
+    document.body.style.overflow = '';
+}
+window.selectUserAvatar = function (url) {
+    document.getElementById('customUserAvatarUrl').value = url;
+    const imgs = document.querySelectorAll('#memeAvatars img');
+    imgs.forEach(i => i.style.borderColor = 'transparent');
+    event.target.style.borderColor = 'var(--neon-cyan)';
+}
+
+window.saveUserAvatar = async function (event) {
+    if (!currentUserUid) return;
+    const url = document.getElementById('customUserAvatarUrl').value.trim();
+    if (!url) return;
+    const btn = event.target;
+    const errorMsg = document.getElementById('avatarErrorMsg');
+    btn.innerText = 'Đang lưu...';
+    try {
+        await setDoc(doc(db, "users", currentUserUid), { avatarUrl: url }, { merge: true });
+        errorMsg.style.color = 'var(--neon-cyan)';
+        errorMsg.innerText = 'Đã cập nhật Avatar cá nhân!';
+        const avatarDiv = document.getElementById('authorAvatar');
+        avatarDiv.style.backgroundImage = `url('${url}')`;
+        avatarDiv.style.backgroundSize = 'cover';
+        avatarDiv.style.backgroundPosition = 'center';
+
+        // restore overlay
+        const overlay = document.getElementById('editAvatarOverlay');
+        if (overlay) {
+            avatarDiv.innerHTML = '';
+            avatarDiv.appendChild(overlay);
+        }
+
+        setTimeout(() => {
+            closeAvatarModal();
+            errorMsg.innerText = '';
+        }, 1500);
+    } catch (e) {
+        errorMsg.style.color = '#ff5e5e';
+        errorMsg.innerText = 'Lỗi: ' + e.message;
+    }
+    finally { btn.innerText = 'Lưu Avatar'; }
+}
+
+async function fetchUserLevelAvatar(uid) {
+    try {
+        const snap = await getDoc(doc(db, "users", uid));
+        const avatarDiv = document.getElementById('authorAvatar');
+
+        let activeAvatar = "";
+        if (snap.exists()) {
+            const userData = snap.data();
+            if (userData.avatarUrl) activeAvatar = userData.avatarUrl;
+            currentUserLikedDocs = userData.likedDocs || [];
+            currentUserVault = userData.vault || [];
+            currentUserRole = userData.role || (uid === 'I3H5iU0XW5R5n4zY3L6z9L9z9L9z' ? 'admin' : 'user'); // Simple check or check email later
+        }
+        if (!activeAvatar) {
+            const defaultMemes = [
+                "https://i.postimg.cc/T1QXVkch/tai-xuong-(3).jpg",
+                "https://i.postimg.cc/qM0R2S4S/kamu-kan.jpg",
+                "https://i.postimg.cc/WzZktkmZ/tai-xuong-(2).jpg",
+                "https://i.postimg.cc/QCvF3xRK/tai-xuong-(1).jpg",
+                "https://i.postimg.cc/zfHPzdbJ/tai-xuong.jpg"
+            ];
+            // Random 1 trong các avatar có sẵn trong code
+            activeAvatar = defaultMemes[Math.floor(Math.random() * defaultMemes.length)];
+            // Lưu lại luôn để họ giữ được avatar này trừ khi đổi cái khác
+            setDoc(doc(db, "users", uid), { avatarUrl: activeAvatar }, { merge: true });
+        }
+
+        avatarDiv.style.backgroundImage = `url('${activeAvatar}')`;
+        avatarDiv.style.backgroundSize = 'cover';
+        avatarDiv.style.backgroundPosition = 'center';
+        avatarDiv.innerHTML = '';
+
+        // Cập nhật lại list card nếu AllDocs đã tải xong
+        if (allDocs.length > 0) {
+            const activeCat = document.querySelector('#homeCategories .cat-tag.active');
+            filterDocs(activeCat ? activeCat.innerText : 'Tất cả');
+        }
+        const overlay = document.createElement('div');
+        overlay.id = "editAvatarOverlay";
+        overlay.className = "edit-avatar-overlay";
+        overlay.innerHTML = "Đổi Avatar<br>Cá Nhân";
+        overlay.onclick = window.openAvatarModal;
+        avatarDiv.appendChild(overlay);
+    } catch (e) { console.error(e); }
+}
+
+async function fetchAdminGlobalAvatar() {
+    try {
+        const snap = await getDoc(doc(db, "settings", "profile"));
+        const avatarDiv = document.getElementById('authorAvatar');
+        if (snap.exists() && snap.data().avatarUrl) {
+            avatarDiv.style.backgroundImage = `url('${snap.data().avatarUrl}')`;
+        } else {
+            const defaultMemes = [
+                "https://i.postimg.cc/T1QXVkch/tai-xuong-(3).jpg",
+                "https://i.postimg.cc/qM0R2S4S/kamu-kan.jpg",
+                "https://i.postimg.cc/WzZktkmZ/tai-xuong-(2).jpg",
+                "https://i.postimg.cc/QCvF3xRK/tai-xuong-(1).jpg",
+                "https://i.postimg.cc/zfHPzdbJ/tai-xuong.jpg"
+            ];
+            // Random cho chính Admin nếu admin mới tạo chưa setup
+            avatarDiv.style.backgroundImage = `url('${defaultMemes[Math.floor(Math.random() * defaultMemes.length)]}')`;
+        }
+        avatarDiv.style.backgroundSize = 'cover';
+        avatarDiv.style.backgroundPosition = 'center';
+        avatarDiv.innerHTML = '';
+    } catch (e) { }
+}
+
+// UI Variables (Preview Modal)
+const modal = document.getElementById('previewModal');
+const modalTitle = document.getElementById('modalTitle');
+const modalDesc = document.getElementById('modalDesc');
+
+// Global functions for inline HTML click events
+window.openModal = async function (docId) {
+    const data = allDocs.find(d => d.id === docId);
+    if (!data) return;
+    currentlyViewingDoc = data;
+
+    modalTitle.innerText = data.title || 'Tài liệu';
+    modalDesc.innerHTML = `<p>${data.description || ''}</p><br><p style="font-size:13px; color:var(--text-secondary)">👁 Lượt xem: <b style="color:var(--neon-cyan)">${data.views || 0}</b> &nbsp;&nbsp;|&nbsp;&nbsp; ⬇ Lượt tải: <b style="color:#00ffaa">${data.downloads || 0}</b></p>`;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // --- Nhúng Video hướng dẫn (nếu có) ---
+    const videoArea = document.getElementById('videoEmbedArea');
+    const videoFrame = document.getElementById('videoEmbedFrame');
+    if (data.videoUrl) {
+        let videoEmbedUrl = data.videoUrl;
+        // YouTube: chuyển sang embed
+        const ytMatch = data.videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+        if (ytMatch) {
+            videoEmbedUrl = `https://www.youtube.com/embed/${ytMatch[1]}?rel=0`;
+        } else {
+            // Google Drive video
+            const gdvMatch = data.videoUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (gdvMatch) videoEmbedUrl = `https://drive.google.com/file/d/${gdvMatch[1]}/preview`;
+        }
+        videoFrame.src = videoEmbedUrl;
+        videoArea.style.display = 'block';
+    } else {
+        videoFrame.src = '';
+        videoArea.style.display = 'none';
+    }
+
+    // --- Nhúng xem trước file ---
+    const iframe = document.getElementById('filePreviewFrame');
+    const loading = document.getElementById('previewLoading');
+    const previewArea = document.getElementById('filePreviewArea');
+    const allowPreview = data.allowPreview !== false; // mặc định true nếu không có trường
+
+    if (!allowPreview) {
+        iframe.style.display = 'none';
+        loading.style.display = 'block';
+        loading.innerHTML = `
+            <div style="text-align:center; padding:40px;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="1.5" style="margin-bottom:16px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <p style="color:var(--text-secondary); font-size:15px; font-weight:500;">Tài liệu này không cho phép xem trước</p>
+                <p style="color:var(--text-secondary); font-size:13px; margin-top:8px; opacity:0.6;">Tải xuống để xem nội dung đầy đủ</p>
+            </div>`;
+        previewArea.style.minHeight = '160px';
+    } else {
+        previewArea.style.minHeight = '500px';
+        iframe.style.display = 'none';
+        loading.style.display = 'block';
+        loading.innerHTML = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--neon-cyan)" stroke-width="2" style="animation:spin 1s linear infinite;margin-bottom:15px;"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="4.93" x2="19.07" y2="7.76"></line></svg><p>Đang tải xem trước...</p>';
+
+        if (data.fileUrl) {
+            let previewUrl = data.fileUrl;
+            const gdriveMatcher = data.fileUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (gdriveMatcher) {
+                previewUrl = `https://drive.google.com/file/d/${gdriveMatcher[1]}/preview`;
+            } else {
+                previewUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(data.fileUrl)}&embedded=true`;
+            }
+            iframe.src = previewUrl;
+        } else {
+            loading.innerHTML = '<p style="color:var(--text-secondary)">Tài liệu này chưa có link xem trước.</p>';
+        }
+    }
+
+    try {
+        await updateDoc(doc(db, "documents", docId), { views: increment(1) });
+        data.views = (data.views || 0) + 1;
+    } catch (e) { }
+};
+
+window.toggleLike = async function (docId) {
+    if (!currentUserUid) {
+        alert('Vui lòng đăng nhập để thả tim tài liệu!');
+        return window.openAuthModal();
+    }
+    try {
+        const docRef = doc(db, "documents", docId);
+        const userRef = doc(db, "users", currentUserUid);
+        if (currentUserLikedDocs.includes(docId)) {
+            await updateDoc(docRef, { likes: increment(-1) });
+            await updateDoc(userRef, { likedDocs: arrayRemove(docId) });
+            currentUserLikedDocs = currentUserLikedDocs.filter(id => id !== docId);
+        } else {
+            await updateDoc(docRef, { likes: increment(1) });
+            await setDoc(userRef, { likedDocs: arrayUnion(docId) }, { merge: true });
+            currentUserLikedDocs.push(docId);
+        }
+        const data = allDocs.find(d => d.id === docId);
+        if (data) {
+            data.likes = (data.likes || 0) + (currentUserLikedDocs.includes(docId) ? 1 : -1);
+        }
+        renderCurrentGrid();
+    } catch (e) { console.error("Error toggling like:", e); }
+};
+
+window.toggleVault = async function (docId) {
+    if (!currentUserUid) {
+        alert('Vui lòng đăng nhập để lưu vào Thư viện Cá nhân!');
+        return window.openAuthModal();
+    }
+    try {
+        const userRef = doc(db, "users", currentUserUid);
+        const isSaved = currentUserVault.includes(docId);
+        
+        if (isSaved) {
+            await updateDoc(userRef, { vault: arrayRemove(docId) });
+            currentUserVault = currentUserVault.filter(id => id !== docId);
+        } else {
+            await setDoc(userRef, { vault: arrayUnion(docId) }, { merge: true });
+            currentUserVault.push(docId);
+        }
+
+        renderCurrentGrid();
+        
+        // Show floating notification
+        const msg = isSaved ? 'Đã xóa khỏi Thư viện!' : 'Đã lưu vào Thư viện Cá nhân!';
+        alert(msg); // Simplified for now
+    } catch (e) { console.error("Error toggling vault:", e); }
+};
+
+function renderCurrentGrid() {
+    const activeCat = document.querySelector('#homeCategories .cat-tag.active');
+    filterDocs(activeCat ? activeCat.getAttribute('data-cat') || activeCat.innerText : 'Tất cả');
+}
+
+window.downloadDoc = async function () {
+    if (!currentlyViewingDoc) return;
+    try {
+        await updateDoc(doc(db, "documents", currentlyViewingDoc.id), { downloads: increment(1) });
+        currentlyViewingDoc.downloads = (currentlyViewingDoc.downloads || 0) + 1;
+        window.open(currentlyViewingDoc.fileUrl, '_blank');
+        closeModal();
+    } catch (e) {
+        alert('Có lỗi xảy ra khi lấy link tải: ' + e.message);
+    }
+};
+
+window.reportDoc = async function () {
+    if (!currentlyViewingDoc) return;
+    if (!currentUserUid) {
+        alert('Vui lòng đăng nhập để gửi báo cáo link hỏng!');
+        return window.openAuthModal();
+    }
+    try {
+        await addDoc(collection(db, "reports"), {
+            docId: currentlyViewingDoc.id,
+            docTitle: currentlyViewingDoc.title,
+            reporterUid: currentUserUid,
+            status: 'pending',
+            timestamp: serverTimestamp()
+        });
+        alert('Cám ơn bạn đã báo cáo. Quản trị viên sẽ sớm kiểm tra lại link!');
+        closeModal();
+    } catch (e) {
+        alert('Lỗi gửi báo cáo: ' + e.message);
+    }
+};
+
+window.closeModal = function () {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+};
+
+// ── Contribute Modal ──
+const contributeModal = document.getElementById('contributeModal');
+
+window.openContributeModal = async function () {
+    if (!currentUserUid) return window.openAuthModal();
+    contributeModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('ctbStatusMsg').style.display = 'none';
+    document.getElementById('ctbSubmitBtn').disabled = false;
+    document.getElementById('ctbSubmitBtn').innerText = 'Gửi Đóng Góp →';
+
+    // Load tags vào datalist
+    const dl = document.getElementById('ctbTagList');
+    dl.innerHTML = '';
+    try {
+        const snap = await getDocs(collection(db, 'tags'));
+        snap.forEach(d => {
+            if (d.data().name) dl.innerHTML += `<option value="${d.data().name}">`;
+        });
+    } catch (e) {}
+};
+
+window.closeContributeModal = function () {
+    contributeModal.classList.remove('active');
+    document.body.style.overflow = '';
+    document.getElementById('ctbTitle').value = '';
+    document.getElementById('ctbDesc').value = '';
+    document.getElementById('ctbTag').value = '';
+    document.getElementById('ctbUrl').value = '';
+    document.getElementById('ctbVideo').value = '';
+};
+
+contributeModal.addEventListener('click', e => { if (e.target === contributeModal) window.closeContributeModal(); });
+
+window.submitContribution = async function () {
+    const title = document.getElementById('ctbTitle').value.trim();
+    const desc = document.getElementById('ctbDesc').value.trim();
+    const tag = document.getElementById('ctbTag').value;
+    const url = document.getElementById('ctbUrl').value.trim();
+    const video = document.getElementById('ctbVideo').value.trim();
+    const status = document.getElementById('ctbStatusMsg');
+    const btn = document.getElementById('ctbSubmitBtn');
+
+    if (!title || !tag || !url) {
+        status.style.display = 'block';
+        status.style.color = '#ff6b6b';
+        status.innerText = '⚠️ Vui lòng điền đầy đủ Tiêu đề, Phân loại và Link tài liệu.';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerText = 'Đang gửi...';
+    status.style.display = 'none';
+
+    try {
+        await addDoc(collection(db, 'submissions'), {
+            title, description: desc, category: tag,
+            fileUrl: url, videoUrl: video || null,
+            submitterUid: currentUserUid,
+            status: 'pending',
+            timestamp: serverTimestamp()
+        });
+        status.style.display = 'block';
+        status.style.color = 'var(--neon-cyan)';
+        status.innerText = '✅ Đã gửi thành công! Cảm ơn bạn đã đóng góp 💛';
+        btn.innerText = 'Đã gửi!';
+        setTimeout(() => window.closeContributeModal(), 2500);
+    } catch (e) {
+        status.style.display = 'block';
+        status.style.color = '#ff6b6b';
+        status.innerText = '❌ Lỗi: ' + e.message;
+        btn.disabled = false;
+        btn.innerText = 'Gửi Đóng Góp →';
+    }
+};
+
+// UI Variables (Auth Modal)
+const authModal = document.getElementById('authModal');
+window.authMode = 'login'; // 'login' or 'register'
+
+window.openAuthModal = function () {
+    authModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('authError').style.display = 'none';
+}
+
+window.closeAuthModal = function () {
+    authModal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+window.togglePasswordVisibility = function () {
+    const pwdInput = document.getElementById('authPassword');
+    const eyeOn = document.getElementById('eyeIcon');
+    const eyeOff = document.getElementById('eyeOffIcon');
+    if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        eyeOn.style.display = 'none';
+        eyeOff.style.display = 'block';
+    } else {
+        pwdInput.type = 'password';
+        eyeOn.style.display = 'block';
+        eyeOff.style.display = 'none';
+    }
+};
+
+window.switchAuthTab = function (mode) {
+    window.authMode = mode;
+    const tabs = document.querySelectorAll('.auth-tab');
+    tabs[0].classList.toggle('active', mode === 'login');
+    tabs[1].classList.toggle('active', mode === 'register');
+
+    document.getElementById('authTitle').innerText = mode === 'login' ? 'Đăng Nhập' : 'Tạo Tài Khoản';
+    document.getElementById('authSubmitBtn').innerText = mode === 'login' ? 'Đăng nhập' : 'Đăng ký';
+    document.getElementById('authError').style.display = 'none';
+}
+
+window.submitAuth = async function () {
+    const email = document.getElementById('authEmail').value;
+    const password = document.getElementById('authPassword').value;
+    const errorMsg = document.getElementById('authError');
+    const btn = document.getElementById('authSubmitBtn');
+
+    btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="4.93" x2="19.07" y2="7.76"></line></svg> Đang xử lý...';
+    errorMsg.style.display = 'none';
+
+    try {
+        if (window.authMode === 'login') {
+            await signInWithEmailAndPassword(auth, email, password);
+        } else {
+            await createUserWithEmailAndPassword(auth, email, password);
+        }
+        window.closeAuthModal();
+    } catch (error) {
+        errorMsg.style.display = 'block';
+        // Lọc lỗi sang tiếng Việt cho thân thiện
+        let tiengVietMap = {
+            'auth/email-already-in-use': 'Email này đã được sử dụng.',
+            'auth/weak-password': 'Mật khẩu quá yếu (tối thiểu 6 ký tự).',
+            'auth/invalid-credential': 'Email hoặc mật khẩu không đúng.',
+            'auth/too-many-requests': 'Bạn đã thử sai quá nhiều lần. Vui lòng thử lại sau.'
+        };
+        errorMsg.innerText = tiengVietMap[error.code] || "Lỗi giao tiếp máy chủ: " + error.code;
+    } finally {
+        btn.innerText = window.authMode === 'login' ? 'Đăng nhập' : 'Tạo tài khoản';
+    }
+}
+
+window.signOutAdmin = async function () {
+    await signOut(auth);
+}
+
+// Close modal when clicking outside content
+window.addEventListener('click', (e) => {
+    if (e.target === modal) window.closeModal();
+    if (e.target === authModal) window.closeAuthModal();
+});
+
+// Escape key to close modal
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        if (modal.classList.contains('active')) window.closeModal();
+        if (authModal.classList.contains('active')) window.closeAuthModal();
+    }
+});
+
+// Auth State Listener
+window.defaultAuthorDesc = document.getElementById('authorDesc').innerHTML;
+onAuthStateChanged(auth, (user) => {
+    const navBtn = document.getElementById('navAuthBtn');
+    const uploadBtn = document.getElementById('adminUploadBtn');
+    const authorH1 = document.querySelector('.author-info h1');
+    const authorDesc = document.getElementById('authorDesc');
+
+    if (user) {
+        // Logged in
+        currentUserUid = user.uid;
+        const isAdmin = user.email === 'vokien609@gmail.com';
+        navBtn.innerText = isAdmin ? 'Đăng xuất Admin' : 'Đăng xuất';
+        navBtn.onclick = window.signOutAdmin;
+        navBtn.style.color = 'var(--neon-cyan)';
+        navBtn.style.borderColor = 'var(--neon-cyan)';
+
+        // Description keeps the same as admin's default info
+        authorDesc.innerHTML = window.defaultAuthorDesc;
+
+        const displayName = user.email.split('@')[0];
+        if (isAdmin) {
+            currentUserRole = 'admin';
+            uploadBtn.style.display = 'flex'; // Hiện nút Upload
+            authorH1.innerHTML = `Chào bạn,<br>Tôi là <span>Bourbon <svg width="24" height="24" style="vertical-align: middle; margin-bottom: 5px;" viewBox="0 0 24 24" fill="var(--neon-cyan)" stroke="var(--neon-cyan)" stroke-width="1"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>`;
+            document.getElementById('contributeNavBtn').style.display = 'none';
+        } else {
+            uploadBtn.style.display = 'none';
+            authorH1.innerHTML = `Chào ${displayName} <svg width="24" height="24" style="vertical-align: middle; margin-bottom: 5px;" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M3 21v-2a7 7 0 0 1 14 0v2"/></svg>,<br>Tôi là <span>Bourbon</span>`;
+            document.getElementById('contributeNavBtn').style.display = 'inline-flex';
+        }
+        fetchUserLevelAvatar(user.uid);
+        fetchTags(); // Reload tags to show private/vault options
+    } else {
+        // Logged out
+        currentUserUid = null;
+        currentUserLikedDocs = [];
+        currentUserVault = [];
+        currentUserRole = 'user';
+        navBtn.innerText = 'Đăng nhập / Đăng ký';
+        navBtn.onclick = window.openAuthModal;
+        navBtn.style.color = '';
+        navBtn.style.borderColor = '';
+
+        uploadBtn.style.display = 'none';
+        document.getElementById('contributeNavBtn').style.display = 'none';
+        authorH1.innerHTML = `Chào bạn,<br>Tôi là <span>Bourbon</span>`;
+        authorDesc.innerHTML = window.defaultAuthorDesc;
+        fetchAdminGlobalAvatar();
+        fetchTags(); // Hide private options
+    }
+});
+
+// Category Data
+let allDocs = [];
+
+async function fetchTags() {
+    try {
+        const snap = await getDocs(collection(db, "tags"));
+        const catDiv = document.getElementById('homeCategories');
+        let html = '<div class="cat-tag active" data-cat="Tất cả" onclick="filterDocs(\'Tất cả\', this)">Tất cả</div>';
+        
+        if (currentUserUid) {
+            html += '<div class="cat-tag" data-cat="vault" style="color: var(--neon-cyan); border-color: var(--neon-cyan);" onclick="filterDocs(\'vault\', this)">📂 Thư viện của tôi</div>';
+            
+            if (currentUserRole === 'vip' || currentUserRole === 'admin' || currentUserRole === 'contributor') {
+                html += '<div class="cat-tag" data-cat="vip" style="color: #ffcc00; border-color: #ffcc00;" onclick="filterDocs(\'vip\', this)">🌟 VIP Hub</div>';
+            }
+        }
+        
+        // Load additional tags from DB
+        snap.forEach(d => {
+            const tagName = d.data().name;
+            if (tagName) {
+                html += `<div class="cat-tag" data-cat="${tagName}" onclick="filterDocs('${tagName}', this)">${tagName}</div>`;
+            }
+        });
+        
+        catDiv.innerHTML = html;
+    } catch (e) { console.error("Cannot fetch tags:", e); }
+}
+
+window.filterDocs = function (category, element) {
+    // Update Active Class
+    const tags = document.querySelectorAll('#homeCategories .cat-tag');
+    tags.forEach(t => t.classList.remove('active'));
+    if (element) element.classList.add('active');
+
+    // Render Filtered
+    const docGrid = document.getElementById('docGrid');
+    let filtered = allDocs;
+
+    // Search Filter Logic
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+    if (searchTerm) {
+        filtered = filtered.filter(d => 
+            (d.title && d.title.toLowerCase().includes(searchTerm)) ||
+            (d.description && d.description.toLowerCase().includes(searchTerm)) ||
+            (d.category && d.category.toLowerCase().includes(searchTerm))
+        );
+    }
+
+    if (category === 'Tất cả') {
+        // Public docs + VIP docs if user has access
+        const hasVipAccess = ['admin', 'vip', 'contributor'].includes(currentUserRole);
+        filtered = filtered.filter(d => !d.isVipOnly || hasVipAccess);
+    } else if (category === 'vault') {
+        filtered = filtered.filter(d => currentUserVault.includes(d.id));
+        if (filtered.length === 0 && !searchTerm) {
+            return docGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--text-secondary);"><p>Thư viện của bạn đang trống.<br>Hãy nhấn nút 📌 trên tài liệu để lưu vào đây!</p></div>`;
+        }
+    } else if (category === 'vip') {
+        filtered = filtered.filter(d => d.isVipOnly);
+        if (filtered.length === 0 && !searchTerm) {
+            return docGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--text-secondary);"><p>Khu vực VIP Hub đang được cập nhật các tài liệu mới...</p></div>`;
+        }
+    } else {
+        filtered = filtered.filter(d => d.category === category);
+    }
+
+    if (filtered.length === 0) {
+        docGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--text-secondary);"><p>Không tìm thấy tài liệu phù hợp...</p></div>`;
+    } else {
+        docGrid.innerHTML = renderDocs(filtered);
+    }
+}
+
+// Add search input listener
+document.getElementById('searchInput').addEventListener('input', () => {
+    renderCurrentGrid();
+});
+
+// Fetch live data directly
+
+function renderDocs(docsData) {
+    let html = '';
+    const now = Date.now();
+    const sevenDays = 7 * 24 * 60 * 60 * 1000;
+
+    docsData.forEach((data) => {
+        const title = data.title || "Tài liệu không tên";
+        const desc = data.description || "Không có mô tả.";
+        const date = data.date || data.createdAt || "Vừa xong";
+        const iconSVG = data.iconSVG || `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline>`;
+
+        // Kiểm tra tài liệu mới (7 ngày gần đây)
+        let isNew = false;
+        if (data.timestamp && data.timestamp.toMillis) {
+            isNew = (now - data.timestamp.toMillis()) < sevenDays;
+        }
+
+        html += `
+        <div class="doc-card liquid-glass">
+            ${isNew ? '<span class="badge-new">🔥 Mới</span>' : ''}
+            <div class="doc-header">
+                <div class="doc-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        ${iconSVG}
+                    </svg>
+                </div>
+                <div class="doc-title">${title} ${data.isVipOnly ? '<span title="VIP ONLY" style="color:#ffcc00; margin-left:5px;">⭐</span>' : ''}</div>
+            </div>
+            <div class="doc-desc">${desc}</div>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
+                <div class="doc-meta" style="gap: 15px;">
+                    <div class="meta-item" title="Lượt xem">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--neon-cyan)" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        ${data.views || 0}
+                    </div>
+                    <div class="meta-item" title="Lượt tải xuống">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00ffaa" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        ${data.downloads || 0}
+                    </div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button title="Lưu vào Thư viện Cá nhân" style="background:none; border:none; cursor:pointer; color: ${currentUserVault.includes(data.id) ? 'var(--neon-cyan)' : 'var(--text-secondary)'}; transition:0.3s;" onclick="toggleVault('${data.id}')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="${currentUserVault.includes(data.id) ? 'var(--neon-cyan)' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+                    </button>
+                    <button title="Yêu thích" style="background:none; border:none; cursor:pointer; color: ${currentUserLikedDocs.includes(data.id) ? '#ff4d4d' : 'var(--text-secondary)'}; display:flex; align-items:center; gap:5px; font-weight:bold; font-size:16px; transition:0.3s;" onclick="toggleLike('${data.id}')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="${currentUserLikedDocs.includes(data.id) ? '#ff4d4d' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        ${data.likes || 0}
+                    </button>
+                </div>
+            </div>
+
+            <div class="doc-footer" style="margin-top:15px; padding-top:15px; border-top:1px solid rgba(255,255,255,0.05);">
+                <div class="doc-meta">
+                    <div class="meta-item">${date}</div>
+                </div>
+                <button class="btn-view" onclick="openModal('${data.id}')">
+                    Xem chi tiết
+                </button>
+            </div>
+        </div>
+        `;
+    });
+    return html;
+}
+
+async function fetchDocuments() {
+    const docGrid = document.getElementById('docGrid');
+
+    try {
+        // Fetch from Firestore collection "documents"
+        const snapshots = await getDocs(collection(db, "documents"));
+
+        if (snapshots.empty) {
+            docGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--text-secondary);"><p>Chưa có tài liệu nào được chia sẻ trên hệ thống.</p></div>';
+        } else {
+            allDocs = [];
+            snapshots.forEach(doc => allDocs.push({ id: doc.id, ...doc.data() }));
+            docGrid.innerHTML = renderDocs(allDocs);
+            showWelcomePopup(allDocs); // ← Hiện popup sau khi tải xong
+        }
+    } catch (err) {
+        console.error("Firebase connection error.", err);
+        docGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--neon-red);"><p>Lỗi kết nối cơ sở dữ liệu. Vui lòng kiểm tra lại quyền truy cập Firestore Rules.</p></div>';
+    }
+}
+
+// ── Welcome Popup Logic ──
+function showWelcomePopup(docs) {
+    const today = new Date().toDateString();
+    const lastSeen = localStorage.getItem('welcomeLastSeen');
+    if (lastSeen === today) return; // Đã xem hôm nay rồi, bỏ qua
+
+    // Đếm tài liệu mới trong 24 giờ qua
+    const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+    const newCount = docs.filter(d => d.timestamp && d.timestamp.toMillis && d.timestamp.toMillis() > oneDayAgo).length;
+
+    const badge = document.getElementById('welcomeNewBadge');
+    const body = document.getElementById('welcomeBody');
+
+    if (newCount > 0) {
+        badge.style.display = 'inline-block';
+        badge.innerHTML = `🔥 ${newCount} tài liệu mới trong 24 giờ qua!`;
+        body.innerHTML = `Hôm nay có <strong style="color:var(--neon-cyan)">${newCount} tài liệu mới</strong> vừa được thêm vào kho.<br>Khám phá ngay và đừng bỏ lỡ nhé! 💛`;
+    } else {
+        body.innerHTML = `Kho tài nguyên của Bourbon luôn miễn phí và được cập nhật thường xuyên.<br>Nếu thấy hữu ích, hãy cho mình biết nhé! 💛`;
+    }
+
+    // Hiện popup sau 800ms delay để trang load xong
+    setTimeout(() => {
+        document.getElementById('welcomeOverlay').classList.add('active');
+    }, 800);
+}
+
+window.closeWelcome = function () {
+    const overlay = document.getElementById('welcomeOverlay');
+    overlay.classList.remove('active');
+    localStorage.setItem('welcomeLastSeen', new Date().toDateString());
+};
+
+// Click ra ngoài để đóng
+document.getElementById('welcomeOverlay').addEventListener('click', function (e) {
+    if (e.target === this) window.closeWelcome();
+});
+
+// Initialize fetch
+fetchTags();
+fetchDocuments();
