@@ -651,6 +651,17 @@
                     </label>
                 </div>
 
+                <div class="toggle-row" style="background: rgba(0, 243, 255, 0.05); border-color: rgba(0, 243, 255, 0.2);">
+                    <div>
+                        <div class="toggle-label" style="color: var(--neon-cyan);">📌 Ghim tài liệu lên đầu trang</div>
+                        <div class="toggle-sub">Luôn hiển thị bài viết này ở vị trí đầu tiên</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="docIsPinned">
+                        <span class="slider" style="border-color: rgba(0, 243, 255, 0.3);"></span>
+                    </label>
+                </div>
+
                 <div id="statusMsg" style="text-align: center; margin-bottom: 20px; font-weight: 500;"></div>
 
                 <div style="display: flex; gap: 15px;">
@@ -884,6 +895,14 @@
                     globalDocs.push({ id: docSnap.id, ...docSnap.data() });
                 });
 
+                // Sort: Pinned first, then by timestamp (desc)
+                globalDocs.sort((a, b) => {
+                    if (a.isPinned !== b.isPinned) return b.isPinned ? 1 : -1;
+                    const timeA = a.timestamp?.toMillis ? a.timestamp.toMillis() : 0;
+                    const timeB = b.timestamp?.toMillis ? b.timestamp.toMillis() : 0;
+                    return timeB - timeA;
+                });
+
                 if (globalDocs.length === 0) {
                     adminDocList.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-secondary);">Chưa có tài liệu nào trong cơ sở dữ liệu.</div>';
                     return;
@@ -979,6 +998,7 @@
             document.getElementById('docVideo').value = documentData.videoUrl || "";
             document.getElementById('docAllowPreview').checked = documentData.allowPreview !== false;
             document.getElementById('docIsVipOnly').checked = documentData.isVipOnly === true;
+            document.getElementById('docIsPinned').checked = documentData.isPinned === true;
 
             // Change UI states
             document.getElementById('formHeader').innerHTML = '✏️ Chỉnh Sửa Tài Liệu';
@@ -1014,6 +1034,7 @@
             const videoUrl = document.getElementById('docVideo').value;
             const allowPreview = document.getElementById('docAllowPreview').checked;
             const isVipOnly = document.getElementById('docIsVipOnly').checked;
+            const isPinned = document.getElementById('docIsPinned').checked;
 
             // Assign smart icon based on user input
             let iconSVG = `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline>`; // Default generic
@@ -1033,6 +1054,7 @@
                 videoUrl: videoUrl || null,
                 allowPreview: allowPreview,
                 isVipOnly: isVipOnly,
+                isPinned: isPinned,
                 iconSVG: iconSVG
             };
 
